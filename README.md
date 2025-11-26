@@ -1,0 +1,1 @@
+# qrPayment-arq-hexagonal
