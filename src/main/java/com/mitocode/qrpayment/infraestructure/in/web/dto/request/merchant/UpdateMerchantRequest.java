@@ -9,6 +9,11 @@ public class UpdateMerchantRequest {
 	private String name;
 	private MerchantType type;
 	private String callBackUrl;
+	
+	
+
+	public UpdateMerchantRequest() {
+	}
 
 	public UpdateMerchantRequest(String merchantId ,String callBackUrl,String name, MerchantType type) {
 		this.validateMerchantId(merchantId);

@@ -22,17 +22,18 @@ public class QRCode {
 	private String qrData;
 	private byte[] qrImage;
 
-	public QRCode(String merchantId, String purchaseOrder, QRType qrType, CurrencyCode currencyOrder, BigDecimal amount,
-			LocalDateTime expirateDate) {
+	public QRCode(QRType qrType, String purchaseOrder, String merchantId,
+            LocalDateTime expirateDate, CurrencyCode currencyCode,
+            BigDecimal amount) {
 
-		this.validateRequiredField(qrType, merchantId, purchaseOrder, currencyOrder, amount, expirateDate);
+		validateRequiredFields(qrType, purchaseOrder,merchantId, expirateDate);
 		// this.validateAmount(amount);
-		this.validateExpirateDate(expirateDate);
+		validateExpirateDate(expirateDate);
 		this.type = qrType;
 		this.id = UUID.randomUUID().toString();
 		this.merchantId = merchantId;
 		this.purchaseOrder = purchaseOrder;
-		this.currencyCode = currencyOrder;
+		this.currencyCode = currencyCode;
 		this.amount = amount;
 		this.expirateDate = expirateDate;
 		this.status = QRStatus.ACTIVE;
@@ -40,8 +41,7 @@ public class QRCode {
 		this.gerenateQRData();
 	}
 
-	private void validateRequiredField(QRType type,String merchantId, String purchaseOrder, CurrencyCode currencyOrder,
-			BigDecimal amount, LocalDateTime expirateDate) {
+	public static void validateRequiredFields(QRType type,String purchaseOrder,String merchantId, LocalDateTime expirateDate) {
 		// TODO Auto-generated m ethod stub
 		if (merchantId == null || merchantId.isEmpty()) {
 			throw new QRInvalidException("merchantId is required");
@@ -75,7 +75,7 @@ public class QRCode {
 //		}
 //	}
 
-	private void validateExpirateDate(LocalDateTime expirateDate) {
+	public static void validateExpirateDate(LocalDateTime expirateDate) {
 		if (expirateDate.isBefore(LocalDateTime.now())) {
 			throw new QRInvalidException("expirateDate must be a future date");
 		}
@@ -113,7 +113,7 @@ public class QRCode {
 	}
 
 	public void setInactiveQR() {
-		this.status = QRStatus.DISABLED;
+		this.status = QRStatus.INACTIVE;
 	}
 
 	public String getId() {

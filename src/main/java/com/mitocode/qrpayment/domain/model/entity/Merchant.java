@@ -47,11 +47,11 @@ public class Merchant {
 
     
     public void desactive(){
-        this.status = MerchantStatus.INACTIVE;
+        this.setStatus(MerchantStatus.INACTIVE);
     }
     
 	public boolean isActive() {
-		return this.status == MerchantStatus.ACTIVE;
+		return this.getStatus() == MerchantStatus.ACTIVE;
 	}
 	
 	public void validate() {

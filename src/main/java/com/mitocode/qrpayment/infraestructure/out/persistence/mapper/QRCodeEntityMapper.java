@@ -22,12 +22,12 @@ public class QRCodeEntityMapper {
 
     public static QRCode toDomain(QRCodeEntity entity) {
         QRCode qr = new QRCode(
-        		entity.getMerchantId(),
+        		entity.getType(),
         		entity.getPurchaseOrder(),
-                entity.getType(),
+        		entity.getMerchantId(),
+        		entity.getExpirateDate(),
                 entity.getCurrencyCode(),
-                entity.getAmount(),
-                entity.getExpirateDate()
+                entity.getAmount()
         );
         qr.setId(entity.getId());
         qr.setQrImage(entity.getQrImage());

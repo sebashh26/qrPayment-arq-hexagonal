@@ -1,0 +1,53 @@
+package com.mitocode.qrpayment.application.usecase.merchant;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.mitocode.qrpayment.application.dto.MerchantDto;
+import com.mitocode.qrpayment.application.exception.BusinessException;
+import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
+import com.mitocode.qrpayment.domain.model.entity.Merchant;
+import com.mitocode.qrpayment.domain.model.enums.MerchantType;
+import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
+
+@ExtendWith(MockitoExtension.class)
+public class GetMerchantByIdUseCaseTest {
+
+    @Mock
+    private MerchantRepository merchantRepository;
+    @Mock
+    private MerchantToMerchantDto mapper;
+    @InjectMocks
+    private GetMerchantByIdUseCase useCase;
+
+    @Test
+    void shouldThrowWhenMerchantNotFound() {
+        when(merchantRepository.findById("id")).thenReturn(Optional.empty());
+        BusinessException ex = assertThrows(BusinessException.class, () -> useCase.execute("id"));
+        assertEquals("Merchant not found", ex.getMessage());
+    }
+
+    @Test
+    void shouldReturnMappedMerchant() {
+        Merchant merchant = new Merchant("Name", "email@example.com", MerchantType.DIGITAL, "url");
+        when(merchantRepository.findById("id")).thenReturn(Optional.of(merchant));
+        MerchantDto expected = new MerchantDto();
+        expected.setName(merchant.getName());
+        when(mapper.buildMerchantDto(any(Merchant.class))).thenReturn(expected);
+
+        MerchantDto result = useCase.execute("id");
+        verify(mapper).buildMerchantDto(merchant);
+        assertEquals(merchant.getName(), result.getName());
+    }
+}

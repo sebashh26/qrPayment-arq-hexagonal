@@ -47,12 +47,12 @@ public class CreateQRUseCase {
 		}
 		
 		QRCode qrCode = new QRCode(
-				qrCmd.getMerchantId(),
-				qrCmd.getPurchaseOrder(),
 				qrCmd.getType(),
+				qrCmd.getPurchaseOrder(),
+				qrCmd.getMerchantId(),
+				qrCmd.getExpirateDate(),				
 				qrCmd.getCurrencyCode(),
-				qrCmd.getAmount(),
-				qrCmd.getExpirateDate()				
+				qrCmd.getAmount()
 				);		
 		
 		byte[] qrImage = this.qrGenerate.generateImage(qrCode.getQrData());

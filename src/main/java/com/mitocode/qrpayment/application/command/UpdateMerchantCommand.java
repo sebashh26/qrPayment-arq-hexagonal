@@ -13,6 +13,7 @@ public class UpdateMerchantCommand {
         this.callbackUrl = callbackUrl;
         this.name = name;
         this.type = type;
+        this.merchantId = merchantId;
     }
 
 

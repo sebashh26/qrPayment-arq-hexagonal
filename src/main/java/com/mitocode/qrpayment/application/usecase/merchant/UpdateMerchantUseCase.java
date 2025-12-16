@@ -7,7 +7,7 @@ import com.mitocode.qrpayment.application.dto.MerchantDto;
 import com.mitocode.qrpayment.application.exception.BusinessException;
 import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
-import com.mitocode.qrpayment.domain.model.enums.MerchantType;
+import com.mitocode.qrpayment.domain.model.exception.MerchantInvalidateException;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
 public class UpdateMerchantUseCase {
@@ -33,24 +33,21 @@ public class UpdateMerchantUseCase {
 
         Merchant merchant  = optionalMerchant.get();
 
-        MerchantType merchantTypeFlux = merchant.getType();
-
-        if (merchantCmd.getType() != null) {
-            merchantTypeFlux = merchantCmd.getType();
+        if (merchantCmd.getType() == null) {
+        	throw new MerchantInvalidateException("type is required");
         }
 
-        if (merchantCmd.getCallbackUrl() != null && !merchantCmd.getCallbackUrl().isEmpty()) {
-            if (merchantTypeFlux.isDigital() ) {
-                if (merchantCmd.getCallbackUrl() == null || merchantCmd.getCallbackUrl().isEmpty()) {
-                    throw  new BusinessException("callbackUrl is required");
-                }
+        String callbackUrl = merchantCmd.getCallbackUrl();
+
+        if (merchantCmd.getType().isDigital()) {
+            if (callbackUrl == null || callbackUrl.isEmpty()) {
+                throw new BusinessException("callbackUrl is required");
             }
-            merchant.setCallBackUrl(merchantCmd.getCallbackUrl());
         }
 
-        if (merchantCmd.getType() != null) {
-            merchant.setType(merchantCmd.getType());
-        }
+        merchant.setCallBackUrl(callbackUrl);
+        merchant.setType(merchantCmd.getType());
+        
 
         if (merchantCmd.getName() != null && !merchantCmd.getName().isEmpty()) {
             merchant.setName(merchantCmd.getName());
