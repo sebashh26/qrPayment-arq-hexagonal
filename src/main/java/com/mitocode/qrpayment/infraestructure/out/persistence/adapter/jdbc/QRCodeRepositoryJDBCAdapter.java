@@ -1,17 +1,22 @@
-package com.mitocode.qrpayment.infraestructure.out.persistence.adapter;
+package com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc;
 
 import java.util.Optional;
+
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
 
 import com.mitocode.qrpayment.domain.model.entity.QRCode;
 import com.mitocode.qrpayment.domain.port.out.persistence.QRRepository;
 import com.mitocode.qrpayment.infraestructure.out.persistence.mapper.QRCodeEntityMapper;
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.QRCodeRepositoryJDBC;
 
-public class QRCodeRepositoryAdapter implements QRRepository {
+@Repository
+@Primary
+public class QRCodeRepositoryJDBCAdapter implements QRRepository {
 
 	private final QRCodeRepositoryJDBC jdbc;
 
-    public QRCodeRepositoryAdapter(QRCodeRepositoryJDBC jdbc) {
+    public QRCodeRepositoryJDBCAdapter(QRCodeRepositoryJDBC jdbc) {
         this.jdbc = jdbc;
     }
 

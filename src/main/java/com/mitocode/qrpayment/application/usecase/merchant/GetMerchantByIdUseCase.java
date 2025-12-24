@@ -2,12 +2,15 @@ package com.mitocode.qrpayment.application.usecase.merchant;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import com.mitocode.qrpayment.application.dto.MerchantDto;
 import com.mitocode.qrpayment.application.exception.BusinessException;
 import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
+@Component
 public class GetMerchantByIdUseCase {
 
 	private final MerchantRepository merchantRepository;

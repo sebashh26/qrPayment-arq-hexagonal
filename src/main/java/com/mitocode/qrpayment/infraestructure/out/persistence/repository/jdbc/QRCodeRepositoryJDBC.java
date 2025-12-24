@@ -6,12 +6,15 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
 import com.mitocode.qrpayment.domain.model.enums.QRStatus;
 import com.mitocode.qrpayment.domain.model.enums.QRType;
 import com.mitocode.qrpayment.infraestructure.out.persistence.config.DbConfig;
 import com.mitocode.qrpayment.infraestructure.out.persistence.entity.QRCodeEntity;
 
+@Repository
 public class QRCodeRepositoryJDBC {
 	
 	public QRCodeEntity save(QRCodeEntity entity) {

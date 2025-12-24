@@ -7,19 +7,43 @@ import com.mitocode.qrpayment.domain.model.enums.BrandType;
 import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
 import com.mitocode.qrpayment.domain.model.enums.PaymentStatus;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name = "payments")
 public class PaymentEntity {
 	
+	@Id
+	@Column(name = "payment_id", length = 36)
 	private String paymentId;
+	@Column(name = "merchant_id", length = 36)
     private String merchantId;
+	@Column(name = "qr_id", length = 36)
     private String qrId;
+	@Column(name = "amount", nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "currency_code", nullable = false, length = 20)
     private CurrencyCode currency;
+	@Column(name = "purchase_order_id", nullable = false, length = 50)
     private String purchaseOrderid;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false, length = 20)
     private PaymentStatus status;
+	@Enumerated(EnumType.STRING)
+    @Column(name = "brand_type", nullable = false, length = 20)
     private BrandType brandType;
+	@Column(name = "wallet_id", length = 36)
     private String walletId;
+	@Column(name = "failure_reason", length = 255)
     private String failureReason;
+	@Column(name = "authorized_at")
     private LocalDateTime authorizedAt;
+	@Column(name = "refunded_at")
     private LocalDateTime refundedAt;
 
     public PaymentEntity(String paymentId, String merchantId, String qrId, BigDecimal amount, CurrencyCode currency, String purchaseOrderid, PaymentStatus status, BrandType brandType, String walletId, String failureReason, LocalDateTime authorizedAt, LocalDateTime refundedAt) {

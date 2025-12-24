@@ -1,4 +1,4 @@
-package com.mitocode.qrpayment.infraestructure.out.persistence.adapter;
+package com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc;
 
 import com.mitocode.qrpayment.domain.model.entity.Payment;
 import com.mitocode.qrpayment.domain.port.out.persistence.PaymentRepository;
@@ -6,11 +6,11 @@ import com.mitocode.qrpayment.infraestructure.out.persistence.entity.PaymentEnti
 import com.mitocode.qrpayment.infraestructure.out.persistence.mapper.PaymentEntityMapper;
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.PaymentRepositoryJDBC;
 
-public class PaymentRepositoryAdapter implements PaymentRepository {
+public class PaymentRepositoryJDBCAdapter implements PaymentRepository {
 
     private final PaymentRepositoryJDBC jdbc;
 
-    public PaymentRepositoryAdapter(PaymentRepositoryJDBC jdbc) {
+    public PaymentRepositoryJDBCAdapter(PaymentRepositoryJDBC jdbc) {
         this.jdbc = jdbc;
     }
 

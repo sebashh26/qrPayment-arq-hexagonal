@@ -2,6 +2,8 @@ package com.mitocode.qrpayment.infraestructure.in.web.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.mitocode.qrpayment.application.command.CreateMerchantCommand;
 import com.mitocode.qrpayment.application.command.UpdateMerchantCommand;
 import com.mitocode.qrpayment.application.dto.MerchantDto;
@@ -18,6 +20,7 @@ import com.mitocode.qrpayment.infraestructure.in.web.mapper.MerchantRequestMappe
 
 
 //este es un Bol que agrupra varios casos de uso y se inyecta en el controlador para su uso
+@Service
 public class MerchantService {
 
     private final CreateMerchantUseCase createMerchantUseCase;

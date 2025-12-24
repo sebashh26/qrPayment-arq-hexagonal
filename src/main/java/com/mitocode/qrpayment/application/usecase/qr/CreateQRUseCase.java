@@ -2,6 +2,8 @@ package com.mitocode.qrpayment.application.usecase.qr;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import com.mitocode.qrpayment.application.command.CreateQRCommand;
 import com.mitocode.qrpayment.application.dto.QRDto;
 import com.mitocode.qrpayment.application.exception.BusinessException;
@@ -13,6 +15,7 @@ import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 import com.mitocode.qrpayment.domain.port.out.persistence.QRRepository;
 import com.mitocode.qrpayment.domain.port.out.qr.QRGenerator;
 
+@Component
 public class CreateQRUseCase {
 	
 	private final QRRepository qrRepository;

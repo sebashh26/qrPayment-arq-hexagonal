@@ -1,8 +1,11 @@
 package com.mitocode.qrpayment.application.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.mitocode.qrpayment.domain.model.entity.Payment;
 import com.mitocode.qrpayment.domain.model.vo.PaymentConfirmation;
 
+@Component
 public class PaymentConfirmationMapper {
 
 

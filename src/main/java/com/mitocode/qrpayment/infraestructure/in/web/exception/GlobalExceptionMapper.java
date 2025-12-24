@@ -1,92 +1,78 @@
 package com.mitocode.qrpayment.infraestructure.in.web.exception;
 
-import com.mitocode.qrpayment.application.exception.BusinessException;
+import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import com.mitocode.qrpayment.domain.model.exception.MerchantInvalidateException;
-import com.mitocode.qrpayment.domain.model.exception.QRInvalidException;
-import com.mitocode.qrpayment.domain.model.exception.WalletException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.ExceptionMapper;
-import jakarta.ws.rs.ext.Provider;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
+
 
 /**- @Provider: Es una anotación de JAX-RS que registra la clase como un componente que puede ser usado por el framework.
 - En este caso, indica que GlobalExceptionMapper es un manejador de excepciones que debe ser reconocido por el contenedor (como Jersey, RESTEasy, etc.).
 - ExceptionMapper<T> es una interfaz de JAX-RS que permite interceptar excepciones lanzadas durante el procesamiento de una solicitud HTTP.
 - Al implementar ExceptionMapper<Throwable>, esta clase captura cualquier excepción no manejada (porque Throwable es la superclase de todas las excepciones y errores en Java).
 - Esto permite centralizar el manejo de errores y devolver respuestas HTTP personalizadas.
-
+- Al migrar se retiro esto
  */
-@Provider
-public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
+@RestControllerAdvice
+public class GlobalExceptionMapper {
 
-	@Override
-	public Response toResponse(Throwable ex) {
-		// ex.printStackTrace(); // útil en desarrollo
+	@ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public ResponseEntity<Map<String, Object>> handleIllegalExceptions(RuntimeException ex, HttpServletRequest request) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("timestamp", ZonedDateTime.now());
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("error", "Bad Request");
+        response.put("message", ex.getMessage());
+        response.put("path", request.getRequestURI());
 
-		String errorType;
-		Response.Status status;
+        return ResponseEntity.badRequest().body(response);
+    }
 
-//        if (ex instanceof BusinessException) {
-//            errorType = "Business Error";
-//            status = Response.Status.BAD_REQUEST;
-//        } else if (ex instanceof MerchantInvalidateException) {
-//            errorType = "Merchant Error";
-//            status = Response.Status.BAD_REQUEST;
-//        } else if (ex instanceof QRInvalidException) {
-//            errorType = "QR Error";
-//            status = Response.Status.BAD_REQUEST;
-//        } else if (ex instanceof WalletException) {
-//            errorType = "Wallet Error";
-//            status = Response.Status.BAD_REQUEST;
-//        } else {
-//            errorType = "Internal Server Error";
-//            status = Response.Status.INTERNAL_SERVER_ERROR;
-//        }
+//    @ExceptionHandler(InvalidRequestException.class)
+//    public ResponseEntity<ErrorResponse> handleInvalidRequestException( RuntimeException ex, HttpServletRequest request) {
+//        ErrorResponse errorResponse = new ErrorResponse
+//                (
+//                        "01",
+//                        "Datos inválidos",
+//                        ex.getMessage()
+//                );
+//
+//        return ResponseEntity.badRequest().body(errorResponse);
+//    }
 
-//		switch (ex) {
-//		case BusinessException be -> {
-//			errorType = "Business Error";
-//			status = Response.Status.BAD_REQUEST;
-//		}
-//		case MerchantInvalidateException me -> {
-//			errorType = "Merchant Error";
-//			status = Response.Status.BAD_REQUEST;
-//		}
-//		case QRInvalidException qe -> {
-//			errorType = "QR Error";
-//			status = Response.Status.BAD_REQUEST;
-//		}
-//		case WalletException we -> {
-//			errorType = "Wallet Error";
-//			status = Response.Status.BAD_REQUEST;
-//		}
-//		default -> {
-//			errorType = "Internal Server Error";
-//			status = Response.Status.INTERNAL_SERVER_ERROR;
-//		}
-//		}
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
 
-		errorType = switch (ex) {
-		case BusinessException be -> "Business Error";
-		case MerchantInvalidateException me -> "Merchant Error";
-		case QRInvalidException qe -> "QR Error";
-		case WalletException we -> "Wallet Error";
-		default -> "Internal Server Error";
-		};
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
 
-		status = switch (ex) {
-		case BusinessException be -> Response.Status.BAD_REQUEST;
-		case MerchantInvalidateException me -> Response.Status.BAD_REQUEST;
-		case QRInvalidException qe -> Response.Status.BAD_REQUEST;
-		case WalletException we -> Response.Status.BAD_REQUEST;
-		default -> Response.Status.INTERNAL_SERVER_ERROR;
-		};
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 
-		ErrorResponse errorResponse = new ErrorResponse(errorType, ex.getMessage());
 
-		return Response.status(status).entity(errorResponse).type(MediaType.APPLICATION_JSON).build();
-	}
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleConstraintViolations(ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getConstraintViolations().forEach(cv -> {
+            String path = cv.getPropertyPath().toString();
+            String field = path.substring(path.lastIndexOf('.') + 1);
+            errors.put(field, cv.getMessage());
+        });
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 
 }

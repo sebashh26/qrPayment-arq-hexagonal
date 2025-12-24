@@ -3,13 +3,31 @@ package com.mitocode.qrpayment.infraestructure.out.persistence.entity;
 import com.mitocode.qrpayment.domain.model.enums.MerchantStatus;
 import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "merchants")
 public class MerchantEntity {
 	
+	@Id
+	@Column(name = "merchant_id", length = 36)
 	private String merchantId;
+	@Column(name = "email", nullable = false, length = 255)
     private String email;
+    @Column(nullable = false, length = 100)
     private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
     private MerchantType type;
+    @Column(name = "callback_url", length = 500)
     private String callBackUrl;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private MerchantStatus status;
     
     

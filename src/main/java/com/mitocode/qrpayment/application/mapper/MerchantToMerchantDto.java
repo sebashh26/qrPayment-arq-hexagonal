@@ -1,8 +1,11 @@
 package com.mitocode.qrpayment.application.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.mitocode.qrpayment.application.dto.MerchantDto;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
 
+@Component
 public class MerchantToMerchantDto {
 
 	public MerchantDto buildMerchantDto(Merchant merchant) {

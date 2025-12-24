@@ -1,5 +1,7 @@
 package com.mitocode.qrpayment.application.usecase.merchant;
 
+import org.springframework.stereotype.Component;
+
 import com.mitocode.qrpayment.application.command.CreateMerchantCommand;
 import com.mitocode.qrpayment.application.dto.MerchantDto;
 import com.mitocode.qrpayment.application.exception.BusinessException;
@@ -7,6 +9,7 @@ import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
+@Component
 public class CreateMerchantUseCase {
 	
 	private final MerchantRepository merchantRepository;

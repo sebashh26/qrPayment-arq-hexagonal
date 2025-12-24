@@ -1,4 +1,4 @@
-package com.mitocode.qrpayment.infraestructure.out.persistence.adapter;
+package com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc;
 
 import java.util.Optional;
 
@@ -8,11 +8,11 @@ import com.mitocode.qrpayment.infraestructure.out.persistence.entity.WalletEntit
 import com.mitocode.qrpayment.infraestructure.out.persistence.mapper.WalletEntityMapper;
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.WalletRepositoryJDBC;
 
-public class WalletRepositoryAdapter implements WalletRepository {
+public class WalletRepositoryJDBCAdapter implements WalletRepository {
 	
 	private final WalletRepositoryJDBC jdbc;
 
-    public WalletRepositoryAdapter(WalletRepositoryJDBC jdbc) {
+    public WalletRepositoryJDBCAdapter(WalletRepositoryJDBC jdbc) {
         this.jdbc = jdbc;
     }
 

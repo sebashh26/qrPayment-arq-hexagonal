@@ -1,5 +1,7 @@
 package com.mitocode.qrpayment.infraestructure.in.web.service;
 
+import org.springframework.stereotype.Service;
+
 import com.mitocode.qrpayment.application.command.PaymentCommand;
 import com.mitocode.qrpayment.application.dto.PaymentDto;
 import com.mitocode.qrpayment.application.usecase.authorize.AuthorizedQRUseCase;
@@ -8,6 +10,7 @@ import com.mitocode.qrpayment.infraestructure.in.web.dto.response.PaymentRespons
 import com.mitocode.qrpayment.infraestructure.in.web.mapper.PaymentDtoMapper;
 import com.mitocode.qrpayment.infraestructure.in.web.mapper.PaymentRequestMapper;
 
+@Service
 public class PaymentService {
 	
 	private final AuthorizedQRUseCase authQRUseCase;

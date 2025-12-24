@@ -8,12 +8,14 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 import com.mitocode.qrpayment.domain.model.enums.BrandStatus;
 import com.mitocode.qrpayment.domain.model.vo.BrandAuthorizationResult;
 import com.mitocode.qrpayment.domain.model.vo.BrandAuthorizedRq;
 import com.mitocode.qrpayment.domain.port.out.proxy.BrandProxy;
 
+@Component//- Equivale a decirle a Spring: “esta clase es un candidato para inyección de dependencias”.
 public class BrandProxyImpl implements BrandProxy {
 
 	private static final String ENDPOINT = "https://brand-proxy.free.beeceptor.com";

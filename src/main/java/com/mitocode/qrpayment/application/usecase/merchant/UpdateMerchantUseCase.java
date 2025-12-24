@@ -2,6 +2,8 @@ package com.mitocode.qrpayment.application.usecase.merchant;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import com.mitocode.qrpayment.application.command.UpdateMerchantCommand;
 import com.mitocode.qrpayment.application.dto.MerchantDto;
 import com.mitocode.qrpayment.application.exception.BusinessException;
@@ -10,6 +12,7 @@ import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.model.exception.MerchantInvalidateException;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
+@Component
 public class UpdateMerchantUseCase {
 
 	private final MerchantRepository merchantRepository;

@@ -2,6 +2,9 @@ package com.mitocode.qrpayment.bootstrap;
 
 import java.net.http.HttpClient;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
 import com.mitocode.qrpayment.application.mapper.QRCodeToQRDto;
 import com.mitocode.qrpayment.application.usecase.authorize.AuthorizedQRUseCase;
@@ -21,10 +24,10 @@ import com.mitocode.qrpayment.domain.port.out.qr.QRGenerator;
 import com.mitocode.qrpayment.infraestructure.in.web.service.MerchantService;
 import com.mitocode.qrpayment.infraestructure.in.web.service.PaymentService;
 import com.mitocode.qrpayment.infraestructure.in.web.service.QRService;
-import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.MerchantRepositoryAdapter;
-import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.PaymentRepositoryAdapter;
-import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.QRCodeRepositoryAdapter;
-import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.WalletRepositoryAdapter;
+import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc.MerchantRepositoryJDBCAdapter;
+import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc.PaymentRepositoryJDBCAdapter;
+import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc.QRCodeRepositoryJDBCAdapter;
+import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc.WalletRepositoryJDBCAdapter;
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.MerchantRepositoryJDBC;
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.PaymentRepositoryJDBC;
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.QRCodeRepositoryJDBC;
@@ -33,10 +36,12 @@ import com.mitocode.qrpayment.infraestructure.out.proxy.BrandProxyImpl;
 import com.mitocode.qrpayment.infraestructure.out.proxy.MerchantProxyImpl;
 import com.mitocode.qrpayment.infraestructure.out.qr.QRGeneratorImpl;
 
+@Configuration
 public class BeanConfig {
 	
+	@Bean
 	public static MerchantService merchantService() {
-        MerchantRepository repository = new MerchantRepositoryAdapter(new MerchantRepositoryJDBC());
+        MerchantRepository repository = new MerchantRepositoryJDBCAdapter(new MerchantRepositoryJDBC());
         MerchantToMerchantDto mapper = new MerchantToMerchantDto();
 
         return new MerchantService(
@@ -49,8 +54,8 @@ public class BeanConfig {
     }
 
     public static QRService qrService() {
-        QRRepository qrRepository = new QRCodeRepositoryAdapter(new QRCodeRepositoryJDBC());
-        MerchantRepository merchantRepository = new MerchantRepositoryAdapter(new MerchantRepositoryJDBC());
+        QRRepository qrRepository = new QRCodeRepositoryJDBCAdapter(new QRCodeRepositoryJDBC());
+        MerchantRepository merchantRepository = new MerchantRepositoryJDBCAdapter(new MerchantRepositoryJDBC());
         QRGenerator qrGenerator = new QRGeneratorImpl();
         QRCodeToQRDto mapper = new QRCodeToQRDto();
 
@@ -60,13 +65,13 @@ public class BeanConfig {
     }
 
     public static PaymentService paymentService() {
-        QRRepository qrRepository = new QRCodeRepositoryAdapter(new QRCodeRepositoryJDBC());
-        MerchantRepository merchantRepository = new MerchantRepositoryAdapter(new MerchantRepositoryJDBC());
+        QRRepository qrRepository = new QRCodeRepositoryJDBCAdapter(new QRCodeRepositoryJDBC());
+        MerchantRepository merchantRepository = new MerchantRepositoryJDBCAdapter(new MerchantRepositoryJDBC());
         HttpClient httpClient = HttpClient.newHttpClient();
         MerchantProxy merchantProxy = new MerchantProxyImpl(httpClient);
-        WalletRepository walletRepository = new WalletRepositoryAdapter(new WalletRepositoryJDBC());
+        WalletRepository walletRepository = new WalletRepositoryJDBCAdapter(new WalletRepositoryJDBC());
         BrandProxy brandProxy = new BrandProxyImpl(httpClient);
-        PaymentRepository paymentRepository = new PaymentRepositoryAdapter(new PaymentRepositoryJDBC());
+        PaymentRepository paymentRepository = new PaymentRepositoryJDBCAdapter(new PaymentRepositoryJDBC());
 
             return new PaymentService(
                 new AuthorizedQRUseCase(merchantProxy, merchantRepository,

@@ -1,4 +1,4 @@
-package com.mitocode.qrpayment.infraestructure.out.persistence.adapter;
+package com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,11 +11,11 @@ import com.mitocode.qrpayment.infraestructure.out.persistence.mapper.MerchantEnt
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.MerchantRepositoryJDBC;
 
 //sirve como conector entre los servicios de coneccion MerchantRepositoryJDBC de la bd y el domino de forma desacoplada
-public class MerchantRepositoryAdapter implements MerchantRepository {
+public class MerchantRepositoryJDBCAdapter implements MerchantRepository {
 	//este es el puerto de salida que conecta con la bd
 	private final MerchantRepositoryJDBC merchantRepositoryJDBC;
 	
-	public MerchantRepositoryAdapter(MerchantRepositoryJDBC merchantRepositoryJDBC) {
+	public MerchantRepositoryJDBCAdapter(MerchantRepositoryJDBC merchantRepositoryJDBC) {
         this.merchantRepositoryJDBC = merchantRepositoryJDBC;
     }
 

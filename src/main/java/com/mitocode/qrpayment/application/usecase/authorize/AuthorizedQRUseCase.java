@@ -1,5 +1,7 @@
 package com.mitocode.qrpayment.application.usecase.authorize;
 
+import org.springframework.stereotype.Component;
+
 import com.mitocode.qrpayment.application.command.PaymentCommand;
 import com.mitocode.qrpayment.application.dto.PaymentDto;
 import com.mitocode.qrpayment.application.exception.BusinessException;
@@ -23,6 +25,7 @@ import com.mitocode.qrpayment.domain.port.out.persistence.WalletRepository;
 import com.mitocode.qrpayment.domain.port.out.proxy.BrandProxy;
 import com.mitocode.qrpayment.domain.port.out.proxy.MerchantProxy;
 
+@Component
 public class AuthorizedQRUseCase {
 
 	private final MerchantProxy merchantProxy;

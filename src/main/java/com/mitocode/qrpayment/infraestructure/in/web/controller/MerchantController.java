@@ -2,27 +2,32 @@ package com.mitocode.qrpayment.infraestructure.in.web.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.mitocode.qrpayment.infraestructure.in.web.dto.request.merchant.CreateMerchantRequest;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.request.merchant.UpdateMerchantRequest;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.response.MerchantResponse;
 import com.mitocode.qrpayment.infraestructure.in.web.service.MerchantService;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 
-
-@Path("/api/merchant")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@RestController
+@RequestMapping("/api/merchant")
+@Tag(name = "Merchant Controller", description = "Merchant management endpoints")
 public class MerchantController {
 	
 	private final MerchantService merchantService;
@@ -32,43 +37,56 @@ public class MerchantController {
 		this.merchantService = merchantService;
 	}
 	
-	@POST
-	public Response createMerchant(CreateMerchantRequest request) {
-		MerchantResponse response = merchantService.createMerchant(request);
-		return Response.status(Response.Status.CREATED).entity(response).build();
-		//return merchantService.createMerchant(request);
-	}
+	@PostMapping
+    @Operation(summary = "Create a new merchant", description = "Creates a new merchant in the system")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Merchant created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "409", description = "Merchant already exists")
+    })
+	 public ResponseEntity<MerchantResponse> create(@Valid @RequestBody CreateMerchantRequest request){
+        MerchantResponse response  = merchantService.createMerchant(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 	
-	@PUT
-	public Response updateMerchant(UpdateMerchantRequest request) {
-		MerchantResponse response = merchantService.updateMerchant(request);
-		return Response.status(Response.Status.OK).entity(response).build();
-		//return merchantService.updateMerchant(request);
-	}
+	@PutMapping("/{id}")
+    @Operation(summary = "Update merchant", description = "Updates the information of a merchant")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Merchant updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Merchant not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid update data")
+    })
+	public ResponseEntity<MerchantResponse> update(@Valid @RequestBody UpdateMerchantRequest request){
+        MerchantResponse response =  merchantService.updateMerchant(request);
+        return ResponseEntity.ok(response);
+    }
 	
-	@GET
-	@Path("/{merchantId}")
-	public Response findMerchantById(@PathParam("merchantId") String merchantId) {
-		MerchantResponse response = merchantService.getMerchant(merchantId);
-		return Response.status(Response.Status.OK).entity(response).build();
-		//return merchantService.getMerchant(merchantId);
-	}
+	@GetMapping("/{id}")
+    @Operation(summary = "Get merchant by ID", description = "Retrieves a merchant by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Merchant found"),
+            @ApiResponse(responseCode = "404", description = "Merchant not found")
+    })
+    public ResponseEntity<MerchantResponse> findById(@PathVariable("merchantId") String merchantId){
+        return ResponseEntity.ok(merchantService.getMerchant(merchantId));
+    }
 	
-	@GET
-	public Response findAllMerchants() {
-		// Implementation for fetching all merchants would go here
-		List<MerchantResponse> merchants = merchantService.getAllMerchants();
-		return Response.status(Response.Status.OK).entity(merchants).build();
-		//return merchantService.getAllMerchants();
-	}
+	@GetMapping
+    @Operation(summary = "List all merchants", description = "Retrieves a list of all merchants")
+    public ResponseEntity<List<MerchantResponse>> findAll() {
+        return ResponseEntity.ok(merchantService.getAllMerchants());
+    }
 	
-	@DELETE
-	@Path("/{merchantId}")
-	public Response deleteMerchantById(@PathParam("merchantId") String merchantId) {
-		MerchantResponse response = merchantService.deleteMerchant(merchantId);
-		return Response.status(Response.Status.NO_CONTENT).entity(response).build();
-		//return merchantService.deleteMerchant(merchantId);
-	}
+	@DeleteMapping("/{id}")
+    @Operation(summary = "Delete merchant", description = "Deletes a merchant by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Merchant deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Merchant not found")
+    })
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
+        merchantService.deleteMerchant(id);
+        return ResponseEntity.noContent().build();
+    }
 	
 
 }

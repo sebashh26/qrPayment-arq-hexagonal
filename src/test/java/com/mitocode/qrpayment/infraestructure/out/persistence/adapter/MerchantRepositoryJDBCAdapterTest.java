@@ -19,17 +19,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
+import com.mitocode.qrpayment.infraestructure.out.persistence.adapter.jdbc.MerchantRepositoryJDBCAdapter;
 import com.mitocode.qrpayment.infraestructure.out.persistence.entity.MerchantEntity;
 import com.mitocode.qrpayment.infraestructure.out.persistence.mapper.MerchantEntityMapper;
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.MerchantRepositoryJDBC;
 
-public class MerchantRepositoryAdapterTest {
+public class MerchantRepositoryJDBCAdapterTest {
 	
 	@Test
     @DisplayName("save: mapea Domain -> Entity, delega en JDBC y mapea Entity -> Domain")
     void save_mapsAndDelegates() {
         MerchantRepositoryJDBC jdbc = mock(MerchantRepositoryJDBC.class);
-        MerchantRepositoryAdapter adapter = new MerchantRepositoryAdapter(jdbc);
+        MerchantRepositoryJDBCAdapter adapter = new MerchantRepositoryJDBCAdapter(jdbc);
 
         Merchant domainIn = mock(Merchant.class);
         MerchantEntity entityIn = mock(MerchantEntity.class);
@@ -54,7 +55,7 @@ public class MerchantRepositoryAdapterTest {
     @DisplayName("update: mapea Domain -> Entity, delega en JDBC y mapea Entity -> Domain")
     void update_mapsAndDelegates() {
         MerchantRepositoryJDBC jdbc = mock(MerchantRepositoryJDBC.class);
-        MerchantRepositoryAdapter adapter = new MerchantRepositoryAdapter(jdbc);
+        MerchantRepositoryJDBCAdapter adapter = new MerchantRepositoryJDBCAdapter(jdbc);
 
         Merchant domainIn = mock(Merchant.class);
         MerchantEntity entityIn = mock(MerchantEntity.class);
@@ -75,7 +76,7 @@ public class MerchantRepositoryAdapterTest {
     @DisplayName("existsByEmail/existsById: delega en JDBC")
     void exists_delegates() {
         MerchantRepositoryJDBC jdbc = mock(MerchantRepositoryJDBC.class);
-        MerchantRepositoryAdapter adapter = new MerchantRepositoryAdapter(jdbc);
+        MerchantRepositoryJDBCAdapter adapter = new MerchantRepositoryJDBCAdapter(jdbc);
 
         when(jdbc.existsByEmail("a@test.com")).thenReturn(true);
         when(jdbc.existsById("m-1")).thenReturn(false);
@@ -91,7 +92,7 @@ public class MerchantRepositoryAdapterTest {
     @DisplayName("findById: presente se mapea a Domain, vacío retorna Optional.empty")
     void findById_mapsOptional() {
         MerchantRepositoryJDBC jdbc = mock(MerchantRepositoryJDBC.class);
-        MerchantRepositoryAdapter adapter = new MerchantRepositoryAdapter(jdbc);
+        MerchantRepositoryJDBCAdapter adapter = new MerchantRepositoryJDBCAdapter(jdbc);
 
         MerchantEntity entity = mock(MerchantEntity.class);
         Merchant domain = mock(Merchant.class);
@@ -114,7 +115,7 @@ public class MerchantRepositoryAdapterTest {
     @DisplayName("findAll: mapea cada Entity a Domain en orden")
     void findAll_mapsList() {
         MerchantRepositoryJDBC jdbc = mock(MerchantRepositoryJDBC.class);
-        MerchantRepositoryAdapter adapter = new MerchantRepositoryAdapter(jdbc);
+        MerchantRepositoryJDBCAdapter adapter = new MerchantRepositoryJDBCAdapter(jdbc);
 
         MerchantEntity e1 = mock(MerchantEntity.class);
         MerchantEntity e2 = mock(MerchantEntity.class);

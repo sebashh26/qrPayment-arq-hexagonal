@@ -6,9 +6,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import org.springframework.stereotype.Component;
+
 import com.mitocode.qrpayment.domain.model.vo.PaymentConfirmation;
 import com.mitocode.qrpayment.domain.port.out.proxy.MerchantProxy;
 
+@Component
 public class MerchantProxyImpl implements MerchantProxy {
 	
 	private static final String ENDPOINT = "https://merchant-proxy.free.beeceptor.com";

@@ -8,128 +8,145 @@ import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
 import com.mitocode.qrpayment.domain.model.enums.QRStatus;
 import com.mitocode.qrpayment.domain.model.enums.QRType;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "qrcodes")
 public class QRCodeEntity {
-	
-	 private String id;
-	    private String merchantId;
-	    private String purchaseOrder;
-	    private QRType type;
-	    private CurrencyCode currencyCode;
-	    private BigDecimal amount;
-	    private LocalDateTime expirateDate;
-	    private QRStatus status;
-	    private byte[] qrImage;
-	    private String qrData;
 
-	    public QRCodeEntity(){}
+	@Id
+	@Column(name = "qr_id")
+	private String id;
+	@Column(name = "merchant_id", length = 36)
+	private String merchantId;
+	@Column(name = "purchase_order_number", nullable = false, length = 50)
+	private String purchaseOrder;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false, length = 20)
+	private QRType type;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "currency_code", nullable = false, length = 20)
+	private CurrencyCode currencyCode;
+	@Column(name = "amount", nullable = false, precision = 19, scale = 2)
+	private BigDecimal amount;
+	@Column(name = "expirate_date")
+	private LocalDateTime expirateDate;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false, length = 20)
+	private QRStatus status;
+	@Column(name = "qr_image")
+	private byte[] qrImage;
+	@Column(name = "qr_data")
+	private String qrData;
 
-	    public QRCodeEntity(String id, String merchantId, String purchaseOrder, QRType type, CurrencyCode currencyCode, BigDecimal amount, LocalDateTime expirateDate, QRStatus status, byte[] qrImage, String qrData) {
-	        this.id = id;
-	        this.merchantId = merchantId;
-	        this.purchaseOrder = purchaseOrder;
-	        this.type = type;
-	        this.currencyCode = currencyCode;
-	        this.amount = amount;
-	        this.expirateDate = expirateDate;
-	        this.status = status;
-	        this.qrImage = qrImage;
-	        this.qrData = qrData;
-	    }
+	public QRCodeEntity() {
+	}
 
-	    public String getId() {
-	        return id;
-	    }
+	public QRCodeEntity(String id, String merchantId, String purchaseOrder, QRType type, CurrencyCode currencyCode,
+			BigDecimal amount, LocalDateTime expirateDate, QRStatus status, byte[] qrImage, String qrData) {
+		this.id = id;
+		this.merchantId = merchantId;
+		this.purchaseOrder = purchaseOrder;
+		this.type = type;
+		this.currencyCode = currencyCode;
+		this.amount = amount;
+		this.expirateDate = expirateDate;
+		this.status = status;
+		this.qrImage = qrImage;
+		this.qrData = qrData;
+	}
 
-	    public void setId(String id) {
-	        this.id = id;
-	    }
+	public String getId() {
+		return id;
+	}
 
-	    public String getMerchantId() {
-	        return merchantId;
-	    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-	    public void setMerchantId(String merchantId) {
-	        this.merchantId = merchantId;
-	    }
+	public String getMerchantId() {
+		return merchantId;
+	}
 
-	    public String getPurchaseOrder() {
-	        return purchaseOrder;
-	    }
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
+	}
 
-	    public void setPurchaseOrder(String purchaseOrder) {
-	        this.purchaseOrder = purchaseOrder;
-	    }
+	public String getPurchaseOrder() {
+		return purchaseOrder;
+	}
 
-	    public QRType getType() {
-	        return type;
-	    }
+	public void setPurchaseOrder(String purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
 
-	    public void setType(QRType type) {
-	        this.type = type;
-	    }
+	public QRType getType() {
+		return type;
+	}
 
-	    public CurrencyCode getCurrencyCode() {
-	        return currencyCode;
-	    }
+	public void setType(QRType type) {
+		this.type = type;
+	}
 
-	    public void setCurrencyCode(CurrencyCode currencyCode) {
-	        this.currencyCode = currencyCode;
-	    }
+	public CurrencyCode getCurrencyCode() {
+		return currencyCode;
+	}
 
-	    public BigDecimal getAmount() {
-	        return amount;
-	    }
+	public void setCurrencyCode(CurrencyCode currencyCode) {
+		this.currencyCode = currencyCode;
+	}
 
-	    public void setAmount(BigDecimal amount) {
-	        this.amount = amount;
-	    }
+	public BigDecimal getAmount() {
+		return amount;
+	}
 
-	    public LocalDateTime getExpirateDate() {
-	        return expirateDate;
-	    }
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
 
-	    public void setExpirateDate(LocalDateTime expirateDate) {
-	        this.expirateDate = expirateDate;
-	    }
+	public LocalDateTime getExpirateDate() {
+		return expirateDate;
+	}
 
-	    public QRStatus getStatus() {
-	        return status;
-	    }
+	public void setExpirateDate(LocalDateTime expirateDate) {
+		this.expirateDate = expirateDate;
+	}
 
-	    public void setStatus(QRStatus status) {
-	        this.status = status;
-	    }
+	public QRStatus getStatus() {
+		return status;
+	}
 
-	    public byte[] getQrImage() {
-	        return qrImage;
-	    }
+	public void setStatus(QRStatus status) {
+		this.status = status;
+	}
 
-	    public void setQrImage(byte[] qrImage) {
-	        this.qrImage = qrImage;
-	    }
+	public byte[] getQrImage() {
+		return qrImage;
+	}
 
-	    public String getQrData() {
-	        return qrData;
-	    }
+	public void setQrImage(byte[] qrImage) {
+		this.qrImage = qrImage;
+	}
 
-	    public void setQrData(String qrData) {
-	        this.qrData = qrData;
-	    }
+	public String getQrData() {
+		return qrData;
+	}
 
-	    @Override
-	    public String toString() {
-	        return "QRCodeEntity{" +
-	                "id='" + id + '\'' +
-	                ", merchantId='" + merchantId + '\'' +
-	                ", purchaseOrder='" + purchaseOrder + '\'' +
-	                ", type=" + type +
-	                ", currencyCode=" + currencyCode +
-	                ", amount=" + amount +
-	                ", expirateDate=" + expirateDate +
-	                ", status=" + status +
-	                ", qrImage=" + Arrays.toString(qrImage) +
-	                ", qrData='" + qrData + '\'' +
-	                '}';
-	    }
+	public void setQrData(String qrData) {
+		this.qrData = qrData;
+	}
+
+	@Override
+	public String toString() {
+		return "QRCodeEntity{" + "id='" + id + '\'' + ", merchantId='" + merchantId + '\'' + ", purchaseOrder='"
+				+ purchaseOrder + '\'' + ", type=" + type + ", currencyCode=" + currencyCode + ", amount=" + amount
+				+ ", expirateDate=" + expirateDate + ", status=" + status + ", qrImage=" + Arrays.toString(qrImage)
+				+ ", qrData='" + qrData + '\'' + '}';
+	}
 
 }
