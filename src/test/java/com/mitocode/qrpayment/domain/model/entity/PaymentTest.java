@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-import com.mitocode.qrpayment.domain.model.entity.Payment;
 import com.mitocode.qrpayment.domain.model.enums.BrandType;
 import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
 import com.mitocode.qrpayment.domain.model.enums.PaymentStatus;
@@ -61,7 +60,7 @@ public class PaymentTest {
 	    @Test
 	    void shouldThrowExceptionIfRequiredFieldIsNull() {
 	        // Ejemplo con merchantId null
-	        IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+	    	IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
 	                new Payment(
 	                        null,
 	                        "qr-456",
@@ -77,7 +76,7 @@ public class PaymentTest {
 	                )
 	        );
 
-	        assertEquals("Merchant id is required", exception.getMessage());
+	        assertEquals("Merchant ID is required", exception.getMessage());
 	    }
 
 	    @Test

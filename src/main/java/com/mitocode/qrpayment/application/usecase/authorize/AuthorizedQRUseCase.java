@@ -1,5 +1,7 @@
 package com.mitocode.qrpayment.application.usecase.authorize;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Component;
 
 import com.mitocode.qrpayment.application.command.PaymentCommand;
@@ -102,7 +104,12 @@ public class AuthorizedQRUseCase {
 
         PaymentConfirmation confirmation = PaymentConfirmationMapper.toConfirmation(payment);
 
-        merchantProxy.confirmedPayment(confirmation);
+        try {
+			merchantProxy.confirmedPayment(confirmation);
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         Payment paymentRs = paymentRepository.save(payment);
         return PaymentToPaymentDto.buildPaymentDto(paymentRs);

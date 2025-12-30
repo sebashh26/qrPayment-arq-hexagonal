@@ -24,7 +24,7 @@ public class MerchantProxyImpl implements MerchantProxy {
 	}
 
 	@Override
-	public void confirmedPayment(PaymentConfirmation paymentConfirmation) {
+	public void confirmedPayment(PaymentConfirmation paymentConfirmation) throws IOException, InterruptedException {
 		
 		String json = """ 
 		{
@@ -55,7 +55,7 @@ public class MerchantProxyImpl implements MerchantProxy {
 			this.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		} catch (IOException | InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw e;
 		}
 			
 			

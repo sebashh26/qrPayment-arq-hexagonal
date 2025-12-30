@@ -102,9 +102,9 @@ public class MerchantProxyImplTest {
 		String body = extractBody(sent);
 		assertTrue(body.contains("\"currency\": \"USD\""));
 		assertTrue(body.contains("\"paymentId\": \"pay-1\""));
-		assertTrue(body.contains("\"purchaseOrderId\" : \"PO-1\""));
-		assertTrue(body.contains("\"amount\" : \"10.00\""));
-		// assertTrue(body.contains("\"authorizedAt\" : \"2025-08-07T11:00:00\""));
+		assertTrue(body.contains("\"purchaseId\": \"PO-1\""));
+		assertTrue(body.contains("\"amount\": 10.0"));
+		assertTrue(body.contains("\"authorizedAt\": \"2025-08-07T11:00\""));
 		assertTrue(body.contains("\"status\": \"APPROVED\""));
 	}
 
@@ -119,8 +119,8 @@ public class MerchantProxyImplTest {
 
 		PaymentConfirmation confirmation = mock(PaymentConfirmation.class);
 
-		RuntimeException ex = assertThrows(RuntimeException.class, () -> proxy.confirmedPayment(confirmation));
-		assertTrue(ex.getCause() instanceof IOException);
+		IOException ex = assertThrows(IOException.class, () -> proxy.confirmedPayment(confirmation));
+		assertTrue(ex  instanceof IOException);
 	}
 
 	@Test
@@ -130,11 +130,11 @@ public class MerchantProxyImplTest {
 		MerchantProxyImpl proxy = new MerchantProxyImpl(httpClient);
 
 		when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
-				.thenThrow(new InterruptedException("inter"));
+				.thenThrow(new InterruptedException("inter2"));
 
 		PaymentConfirmation confirmation = mock(PaymentConfirmation.class);
 
-		RuntimeException ex = assertThrows(RuntimeException.class, () -> proxy.confirmedPayment(confirmation));
-		assertTrue(ex.getCause() instanceof InterruptedException);
+		InterruptedException ex = assertThrows(InterruptedException.class, () -> proxy.confirmedPayment(confirmation));
+		assertTrue(ex instanceof InterruptedException);
 	}
 }
