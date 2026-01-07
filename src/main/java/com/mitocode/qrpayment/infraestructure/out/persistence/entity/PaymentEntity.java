@@ -18,32 +18,32 @@ import jakarta.persistence.Table;
 public class PaymentEntity {
 	
 	@Id
-	@Column(name = "payment_id", length = 36)
+	@Column(name = "paymentid", length = 36)
 	private String paymentId;
-	@Column(name = "merchant_id", length = 36)
+	@Column(name = "merchantid", length = 36)
     private String merchantId;
-	@Column(name = "qr_id", length = 36)
+	@Column(name = "qrid", length = 36)
     private String qrId;
 	@Column(name = "amount", nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
 	@Enumerated(EnumType.STRING)
-	@Column(name = "currency_code", nullable = false, length = 20)
+	@Column(name = "currency", nullable = false, length = 20)
     private CurrencyCode currency;
-	@Column(name = "purchase_order_id", nullable = false, length = 50)
+	@Column(name = "purchaseorderid", nullable = false, length = 50)
     private String purchaseOrderid;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false, length = 20)
     private PaymentStatus status;
 	@Enumerated(EnumType.STRING)
-    @Column(name = "brand_type", nullable = false, length = 20)
+    @Column(name = "brandtype", nullable = false, length = 20)
     private BrandType brandType;
-	@Column(name = "wallet_id", length = 36)
+	@Column(name = "walletid", length = 36)
     private String walletId;
-	@Column(name = "failure_reason", length = 255)
+	@Column(name = "failurereason", length = 255)
     private String failureReason;
-	@Column(name = "authorized_at")
+	@Column(name = "authorizedat")
     private LocalDateTime authorizedAt;
-	@Column(name = "refunded_at")
+	@Column(name = "refundedat")
     private LocalDateTime refundedAt;
 
     public PaymentEntity(String paymentId, String merchantId, String qrId, BigDecimal amount, CurrencyCode currency, String purchaseOrderid, PaymentStatus status, BrandType brandType, String walletId, String failureReason, LocalDateTime authorizedAt, LocalDateTime refundedAt) {

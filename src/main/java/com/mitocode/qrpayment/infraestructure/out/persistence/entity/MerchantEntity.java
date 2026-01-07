@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class MerchantEntity {
 	
 	@Id
-	@Column(name = "merchant_id", length = 36)
+	@Column(name = "merchantid", length = 36)
 	private String merchantId;
 	@Column(name = "email", nullable = false, length = 255)
     private String email;

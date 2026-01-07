@@ -14,5 +14,5 @@ public interface MerchantRepository {
 	Optional<Merchant> findById(String id);
 	List<Merchant> findAll();
 	//Optional<Merchant> findByEmail(String email);
-	//Merchant deletebyId(String id);
+	//Merchant deleteById(String id);
 }

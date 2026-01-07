@@ -56,7 +56,8 @@ public class MerchantController {
             @ApiResponse(responseCode = "404", description = "Merchant not found"),
             @ApiResponse(responseCode = "400", description = "Invalid update data")
     })
-	public ResponseEntity<MerchantResponse> update(@Valid @RequestBody UpdateMerchantRequest request){
+	public ResponseEntity<MerchantResponse> update( @PathVariable String id, @Valid @RequestBody UpdateMerchantRequest request){
+		request.setMerchantId(id);
         MerchantResponse response =  merchantService.updateMerchant(request);
         return ResponseEntity.ok(response);
     }
@@ -67,7 +68,7 @@ public class MerchantController {
             @ApiResponse(responseCode = "200", description = "Merchant found"),
             @ApiResponse(responseCode = "404", description = "Merchant not found")
     })
-    public ResponseEntity<MerchantResponse> findById(@PathVariable("merchantId") String merchantId){
+    public ResponseEntity<MerchantResponse> findById(@PathVariable("id") String merchantId){
         return ResponseEntity.ok(merchantService.getMerchant(merchantId));
     }
 	
@@ -78,7 +79,7 @@ public class MerchantController {
     }
 	
 	@DeleteMapping("/{id}")
-    @Operation(summary = "Delete merchant", description = "Deletes a merchant by its ID")
+    @Operation(summary = "Delete merchant", description = "no delete only desactive")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Merchant deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Merchant not found")

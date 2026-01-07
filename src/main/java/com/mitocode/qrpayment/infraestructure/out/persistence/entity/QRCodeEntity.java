@@ -20,28 +20,28 @@ import jakarta.persistence.Table;
 public class QRCodeEntity {
 
 	@Id
-	@Column(name = "qr_id")
+	@Column(name = "qrid")
 	private String id;
-	@Column(name = "merchant_id", length = 36)
+	@Column(name = "merchantid", length = 36)
 	private String merchantId;
-	@Column(name = "purchase_order_number", nullable = false, length = 50)
+	@Column(name = "purchaseordernumber", nullable = false, length = 50)
 	private String purchaseOrder;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false, length = 20)
 	private QRType type;
 	@Enumerated(EnumType.STRING)
-	@Column(name = "currency_code", nullable = false, length = 20)
+	@Column(name = "currencycode", nullable = false, length = 20)
 	private CurrencyCode currencyCode;
 	@Column(name = "amount", nullable = false, precision = 19, scale = 2)
 	private BigDecimal amount;
-	@Column(name = "expirate_date")
+	@Column(name = "expiratedate")
 	private LocalDateTime expirateDate;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false, length = 20)
 	private QRStatus status;
-	@Column(name = "qr_image")
+	@Column(name = "qrimage")
 	private byte[] qrImage;
-	@Column(name = "qr_data")
+	@Column(name = "qrdata")
 	private String qrData;
 
 	public QRCodeEntity() {

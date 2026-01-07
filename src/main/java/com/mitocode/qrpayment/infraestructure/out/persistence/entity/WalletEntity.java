@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Table(name = "wallets")
 public class WalletEntity {
 	@Id
-	@Column(name = "wallet_id")
+	@Column(name = "walletid")
 	private String walletId;
 	private String name;
 	private String description;
