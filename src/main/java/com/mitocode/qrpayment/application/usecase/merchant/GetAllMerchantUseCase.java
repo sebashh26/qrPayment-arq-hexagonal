@@ -1,7 +1,6 @@
 package com.mitocode.qrpayment.application.usecase.merchant;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -28,7 +27,7 @@ public class GetAllMerchantUseCase {
         return merchantRepository.findAll()
                 .stream()
                 .map(mapper:: buildMerchantDto)
-                .collect(Collectors.toList());
+                .toList();
 
     }
 	

@@ -106,10 +106,13 @@ public class AuthorizedQRUseCase {
 
         try {
 			merchantProxy.confirmedPayment(confirmation);
-		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        } catch (IOException e) {
+            throw new RuntimeException("I/O error notifying merchant: " + e.getMessage(), e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // restaurar estado de interrupción
+            throw new RuntimeException("Thread interrupted while notifying merchant", e);
+        }
+
 
         Payment paymentRs = paymentRepository.save(payment);
         return PaymentToPaymentDto.buildPaymentDto(paymentRs);

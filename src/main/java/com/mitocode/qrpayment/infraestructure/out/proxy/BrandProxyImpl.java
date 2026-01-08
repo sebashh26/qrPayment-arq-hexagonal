@@ -58,9 +58,15 @@ public class BrandProxyImpl implements BrandProxy {
 			return new BrandAuthorizationResult(jsonResult.getString("brandId"),
 					BrandStatus.valueOf(jsonResult.getString("status")), jsonResult.getString("failedMessage"),
 					LocalDateTime.parse(jsonResult.getString("authorizedAt")));
-		} catch (IOException | InterruptedException e) {
-			throw new RuntimeException(e);
+		} catch (IOException e) {
+		    throw new RuntimeException("I/O error", e);
+		} catch (InterruptedException e) {
+		    // Restaurar el estado de interrupción
+		    Thread.currentThread().interrupt();
+		    // Propagar como RuntimeException si quieres
+		    throw new RuntimeException("Thread was interrupted", e);
 		}
+
 	}
 
 }
