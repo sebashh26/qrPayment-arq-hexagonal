@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.mitocode.qrpayment.application.command.CreateMerchantCommand;
 import com.mitocode.qrpayment.application.dto.MerchantDto;
-import com.mitocode.qrpayment.application.exception.BusinessException;
+import com.mitocode.qrpayment.application.exception.InvalidRequestException;
 import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
@@ -23,12 +23,12 @@ public class CreateMerchantUseCase {
 	public MerchantDto execute(CreateMerchantCommand merchantCmd) {
 
         if (merchantRepository.existsByEmail(merchantCmd.getEmail())){
-            throw new BusinessException("Email already exists");
+            throw new InvalidRequestException("Email already exists");
         }
 
         if ( merchantCmd.getType().isDigital() ) {
             if (merchantCmd.getCallbackUrl() == null || merchantCmd.getCallbackUrl().isEmpty()) {
-                throw new BusinessException("callbackUrl is required");
+                throw new InvalidRequestException("callbackUrl is required");
             }
         }
 

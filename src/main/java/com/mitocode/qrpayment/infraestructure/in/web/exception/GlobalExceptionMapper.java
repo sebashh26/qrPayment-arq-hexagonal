@@ -12,6 +12,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.mitocode.qrpayment.application.exception.InvalidRequestException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 
@@ -37,18 +39,29 @@ public class GlobalExceptionMapper {
 
         return ResponseEntity.badRequest().body(response);
     }
-
-//    @ExceptionHandler(InvalidRequestException.class)
-//    public ResponseEntity<ErrorResponse> handleInvalidRequestException( RuntimeException ex, HttpServletRequest request) {
-//        ErrorResponse errorResponse = new ErrorResponse
-//                (
-//                        "01",
-//                        "Datos inválidos",
-//                        ex.getMessage()
-//                );
+	
+//	@ExceptionHandler({InvalidRequestException.class})
+//    public ResponseEntity<Map<String, Object>> InvalidRequestException(RuntimeException ex, HttpServletRequest request) {
+//        Map<String, Object> response = new LinkedHashMap<>();
+//        response.put("timestamp", ZonedDateTime.now());
+//        response.put("status", HttpStatus.BAD_REQUEST.value());
+//        response.put("error", "Bad Request");
+//        response.put("message", ex.getMessage());
+//        response.put("path", request.getRequestURI());
 //
-//        return ResponseEntity.badRequest().body(errorResponse);
-//    }
+//        return ResponseEntity.badRequest().body(response);
+//    } 
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRequestException( RuntimeException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                        "01",
+                        "Datos inválidos",
+                        ex.getMessage()
+                );
+
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {

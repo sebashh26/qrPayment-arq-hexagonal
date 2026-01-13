@@ -1,80 +1,31 @@
 package com.mitocode.qrpayment.infraestructure.in.web.dto.request.merchant;
 
 import com.mitocode.qrpayment.domain.model.enums.MerchantType;
-import com.mitocode.qrpayment.infraestructure.in.web.exception.InvalidArgumentException;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class CreateMerchantRequest {
 
+	@NotEmpty(message = "email is required")
+	@NotBlank(message = "email is required")
+	@Email
 	private String email;
+	@NotEmpty(message = "name is required")
+	@NotBlank(message = "name is required")
+	@Size(min=1, max = 100, message = "name must be between 1 and 100 characters")
 	private String name;
+	
+	@NotNull(message = "type is required")
 	private MerchantType type;
 	private String callBackUrl;
-	
-	
-
-	public CreateMerchantRequest() {
-	}
-
-	public CreateMerchantRequest(String callBackUrl, String email, String name, MerchantType type) {
-		this.validateRequiredField(email, name, type);
-		this.validateName(name);
-		this.email = email;
-		this.name = name;
-		this.type = type;
-		this.callBackUrl = callBackUrl;
-
-	}
-
-	private void validateRequiredField(String email, String name, MerchantType type) {
-		if (email == null || email.isEmpty()) {
-			throw new InvalidArgumentException("email is required");
-		}
-		if (name == null || name.isEmpty()) {
-			throw new InvalidArgumentException("name is required");
-		}
-		if (type == null) {
-			throw new InvalidArgumentException("type is required");
-		}
-	}
-
-	private void validateName(String name) {
-		if (name.length() > 100) {
-			throw new InvalidArgumentException("Merchant name can not exceed 100 characters");
-		}
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public MerchantType getType() {
-		return type;
-	}
-
-	public void setType(MerchantType type) {
-		this.type = type;
-	}
-
-	public String getCallBackUrl() {
-		return callBackUrl;
-	}
-
-	public void setCallBackUrl(String callBackUrl) {
-		this.callBackUrl = callBackUrl;
-	}
-	
-	
-
 }

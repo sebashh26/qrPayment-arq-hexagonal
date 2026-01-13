@@ -19,7 +19,7 @@ import org.mockito.stubbing.Answer;
 
 import com.mitocode.qrpayment.application.command.CreateMerchantCommand;
 import com.mitocode.qrpayment.application.dto.MerchantDto;
-import com.mitocode.qrpayment.application.exception.BusinessException;
+import com.mitocode.qrpayment.application.exception.InvalidRequestException;
 import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.model.enums.MerchantStatus;
@@ -51,7 +51,7 @@ public class CreateMerchantUseCaseTest {
 	@Test
 	void shouldThrowWhenEmailAlreadyExists() {
 		when(merchantRepository.existsByEmail(command.getEmail())).thenReturn(true);
-		BusinessException ex = assertThrows(BusinessException.class, () -> useCase.execute(command));
+		InvalidRequestException ex = assertThrows(InvalidRequestException.class, () -> useCase.execute(command));
 		assertEquals("Email already exists", ex.getMessage());
 	}
 	
@@ -59,7 +59,7 @@ public class CreateMerchantUseCaseTest {
     void shouldThrowWhenDigitalMerchantWithoutCallback() {
         command = new CreateMerchantCommand(null, "email@example.com", "Merchant Test", MerchantType.DIGITAL );
         when(merchantRepository.existsByEmail(command.getEmail())).thenReturn(false);
-        BusinessException ex = assertThrows(BusinessException.class, () -> useCase.execute(command));
+        InvalidRequestException ex = assertThrows(InvalidRequestException.class, () -> useCase.execute(command));
         assertEquals("callbackUrl is required", ex.getMessage());
     }
 

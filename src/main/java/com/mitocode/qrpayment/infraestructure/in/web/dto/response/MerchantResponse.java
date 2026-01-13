@@ -3,6 +3,14 @@ package com.mitocode.qrpayment.infraestructure.in.web.dto.response;
 import com.mitocode.qrpayment.domain.model.enums.MerchantStatus;
 import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class MerchantResponse {
 
 	private String merchantId;
@@ -11,67 +19,5 @@ public class MerchantResponse {
 	private MerchantType type;
 	private String callBackUrl;
 	private MerchantStatus status;
-
-	public MerchantResponse(String merchantId, String email, String name, MerchantType type, String callBackUrl,
-			MerchantStatus status) {
-		this.merchantId = merchantId;
-		this.email = email;
-		this.name = name;
-		this.type = type;
-		this.callBackUrl = callBackUrl;
-		this.status = status;
-	}
-
-	public MerchantResponse() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public String getMerchantId() {
-		return merchantId;
-	}
-
-	public void setMerchantId(String merchantId) {
-		this.merchantId = merchantId;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public MerchantType getType() {
-		return type;
-	}
-
-	public void setType(MerchantType type) {
-		this.type = type;
-	}
-
-	public String getCallBackUrl() {
-		return callBackUrl;
-	}
-
-	public void setCallBackUrl(String callBackUrl) {
-		this.callBackUrl = callBackUrl;
-	}
-
-	public MerchantStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(MerchantStatus status) {
-		this.status = status;
-	}
 
 }
