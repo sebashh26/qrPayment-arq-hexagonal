@@ -1,26 +1,16 @@
 package com.mitocode.qrpayment.infraestructure.in.web.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.mitocode.qrpayment.infraestructure.in.web.dto.request.qr.CreateQRRequest;
-import com.mitocode.qrpayment.infraestructure.in.web.dto.response.QRResponse;
 import com.mitocode.qrpayment.infraestructure.in.web.service.QRService;
 
 
 
 @ExtendWith(MockitoExtension.class)
-public class QRControllerTest {
+class QRControllerTest {
 
 	@Mock
     private QRService qrService;

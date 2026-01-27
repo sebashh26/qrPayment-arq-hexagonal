@@ -407,12 +407,17 @@ Esta sección describe **cómo integrar un proyecto Java con Keycloak** usando D
 1. Levantar Keycloak
 
 docker run -d --name keycloak-dev -p 8383:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:24.0.3 start-dev
+1.1crear realm porque ese va en path de la solicitud el token
 2. Ingresar Al dashboard de Keycloak
 3. Ingresar a Clients
 4. Ingresar a Create Client
 5. Colar un clientId = Example keycloak-arq-payment
 6. Activar flags de Client authorization y Authorization
-2. Ingresar Al dashboard de Keycloak
+7. colocar las cabeceras con los valores de clint id genErado y el cliente secret , en mi caso:
+
+	7.1 keycloak-arq-payment que se saca de client/client details/settings/clinet id
+	
+	7.2  NC6VyzRgl4ljILCRqEVTbz4aXFOp8ql4 que se saca de client/client details/credentials/client secret
 ---
 
 ## 📌 Retos para Mejorar

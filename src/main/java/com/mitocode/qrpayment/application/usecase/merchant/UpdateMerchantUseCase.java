@@ -42,10 +42,8 @@ public class UpdateMerchantUseCase {
 
         String callbackUrl = merchantCmd.getCallbackUrl();
 
-        if (merchantCmd.getType().isDigital()) {
-            if (callbackUrl == null || callbackUrl.isEmpty()) {
+        if (merchantCmd.getType().isDigital() && (callbackUrl == null || callbackUrl.isEmpty())) {
                 throw new BusinessException("callbackUrl is required");
-            }
         }
 
         merchant.setCallBackUrl(callbackUrl);

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mitocode.qrpayment.infraestructure.in.web.annotation.AuthorizeWalletFilter;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.request.payment.PaymentRequest;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.response.PaymentResponse;
 import com.mitocode.qrpayment.infraestructure.in.web.service.PaymentService;
@@ -27,6 +28,7 @@ public class PaymentController {
     }
 
     @PostMapping("/authorize")
+    @AuthorizeWalletFilter()
     @Operation(summary = "Authorize a payment", description = "Authorizes a payment using QR code and wallet credentials")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Payment authorized successfully"),

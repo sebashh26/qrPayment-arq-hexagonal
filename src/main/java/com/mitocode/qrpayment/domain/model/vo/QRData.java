@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
 import com.mitocode.qrpayment.domain.model.enums.QRType;
 
+import lombok.Getter;
+
+@Getter
 public final class  QRData {
 	
 	private final String id;
@@ -21,7 +24,6 @@ public final class  QRData {
 		this.currencyCode = currencyCode;
 		this.amount = amount;
         this.type = qrType;
-;
 	}
 	
 	public static QRData from(String rawData) {
@@ -41,35 +43,8 @@ public final class  QRData {
                     QRType.valueOf(parts[11])
             );
         } catch (Exception ex){
-            System.out.println( ex.getLocalizedMessage());
             throw new IllegalArgumentException("Failed to parse QR Data "+rawData);
         }
     }
-
-	public String getId() {
-		return id;
-	}
-
-	public String getMerchantId() {
-		return merchantId;
-	}
-
-	public String getPurchaseOrder() {
-		return purchaseOrder;
-	}
-
-	public CurrencyCode getCurrencyCode() {
-		return currencyCode;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-	
-	public QRType getType() {
-		return type;
-	}
-	
-	
 
 }

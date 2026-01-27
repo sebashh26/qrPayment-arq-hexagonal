@@ -9,17 +9,21 @@ import com.mitocode.qrpayment.domain.model.vo.PaymentConfirmation;
 public class PaymentConfirmationMapper {
 
 
-    public static PaymentConfirmation toConfirmation(Payment payment) {
+    private PaymentConfirmationMapper() {
+		
+	}
+
+	public static PaymentConfirmation toConfirmation(Payment payment) {
         if (payment == null) {
             throw new IllegalArgumentException("Payment cannot be null");
         }
-//solo envio los datos necesarios para la confirmacion del pago
+        //solo envio los datos necesarios para la confirmacion del pago
         return new PaymentConfirmation(
                 payment.getPaymentId(),
-                payment.getPurchaseOrderId(),
-                payment.getAmount(),
-                payment.getCurrency().getCurrencyCode(),
-                payment.getAuthorizedAt(),
+                payment.getOrder().getPurchaseOrderid(),
+                payment.getOrder().getAmount(),
+                payment.getOrder().getCurrency().getCurrencyCode(),
+                payment.getAuthorizationInfo() != null ? payment.getAuthorizationInfo().getAuthorizedAt() : null,
                 payment.getStatus().name()
         );
     }

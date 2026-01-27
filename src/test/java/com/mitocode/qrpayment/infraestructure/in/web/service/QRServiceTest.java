@@ -12,7 +12,7 @@ import com.mitocode.qrpayment.application.usecase.qr.CreateQRUseCase;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.request.qr.CreateQRRequest;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.response.QRResponse;
 
-public class QRServiceTest {
+class QRServiceTest {
 	
 	 @Test
 	    void createQR_shouldReturnQRResponse() {

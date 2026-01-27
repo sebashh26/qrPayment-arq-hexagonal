@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mitocode.qrpayment.infraestructure.in.web.annotation.AuthorizeMerchantFilter;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.request.merchant.CreateMerchantRequest;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.request.merchant.UpdateMerchantRequest;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.response.MerchantResponse;
@@ -73,6 +74,7 @@ public class MerchantController {
     }
 	
 	@GetMapping
+	@AuthorizeMerchantFilter()
     @Operation(summary = "List all merchants", description = "Retrieves a list of all merchants")
     public ResponseEntity<List<MerchantResponse>> findAll() {
         return ResponseEntity.ok(merchantService.getAllMerchants());

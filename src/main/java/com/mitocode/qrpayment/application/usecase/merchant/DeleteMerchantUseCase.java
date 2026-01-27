@@ -10,16 +10,14 @@ import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Component
 public class DeleteMerchantUseCase {
 
 	private final MerchantRepository merchantRepository;
 	private final MerchantToMerchantDto mapper;
-
-	public DeleteMerchantUseCase(MerchantRepository merchantRepository, MerchantToMerchantDto mapper) {
-		this.merchantRepository = merchantRepository;
-		this.mapper = mapper;
-	}
 
 	public MerchantDto execute(String merchantId) {
 

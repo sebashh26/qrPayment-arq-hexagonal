@@ -14,6 +14,7 @@ import com.mitocode.qrpayment.domain.model.enums.BrandStatus;
 import com.mitocode.qrpayment.domain.model.vo.BrandAuthorizationResult;
 import com.mitocode.qrpayment.domain.model.vo.BrandAuthorizedRq;
 import com.mitocode.qrpayment.domain.port.out.proxy.BrandProxy;
+import com.mitocode.qrpayment.infraestructure.out.proxy.exception.ProxyException;
 
 @Component//- Equivale a decirle a Spring: “esta clase es un candidato para inyección de dependencias”.
 public class BrandProxyImpl implements BrandProxy {
@@ -35,7 +36,6 @@ public class BrandProxyImpl implements BrandProxy {
 					"cvv": "%s",
 					"expirationMonth": "%s",
 					"expirationYear": "%s"
-
 				}
 				""".formatted(brandAuthorized.getCardNumber(), brandAuthorized.getCvv(),
 				brandAuthorized.getExpirationMonth(), brandAuthorized.getExpirationYear());
@@ -51,7 +51,7 @@ public class BrandProxyImpl implements BrandProxy {
 			brandRslt = this.httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
 			if (brandRslt.statusCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + brandRslt.statusCode());
+				throw new ProxyException("Failed : HTTP error code : " + brandRslt.statusCode());
 			}
 
 			var jsonResult = new JSONObject(brandRslt.body());
@@ -59,12 +59,12 @@ public class BrandProxyImpl implements BrandProxy {
 					BrandStatus.valueOf(jsonResult.getString("status")), jsonResult.getString("failedMessage"),
 					LocalDateTime.parse(jsonResult.getString("authorizedAt")));
 		} catch (IOException e) {
-		    throw new RuntimeException("I/O error", e);
+		    throw new ProxyException(e.getMessage());
 		} catch (InterruptedException e) {
 		    // Restaurar el estado de interrupción
 		    Thread.currentThread().interrupt();
 		    // Propagar como RuntimeException si quieres
-		    throw new RuntimeException("Thread was interrupted", e);
+		    throw new ProxyException(e.getMessage());
 		}
 
 	}

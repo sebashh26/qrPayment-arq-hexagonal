@@ -6,15 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.model.enums.MerchantStatus;
 import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 import com.mitocode.qrpayment.domain.model.exception.MerchantInvalidateException;
 
-public class MerchantTest {
+class MerchantTest {
 	
 	@Test
-	public void createMerchantWithValidFieldsTest() {
+	 void createMerchantWithValidFieldsTest() {
 		// Implement test logic to create a Merchant with valid fields
 		Merchant merchant = new Merchant("Merchat test", "test@test.com", MerchantType.DIGITAL, "http://callback.url" );
 		assertNotNull(merchant.getMerchantId());
@@ -23,7 +22,7 @@ public class MerchantTest {
 	}
 	
 	@Test
-	public void throwExceptionWhenEmailIsNullTest() {
+	 void throwExceptionWhenEmailIsNullTest() {
 		// Implement test logic to verify exception is thrown when email is null
 		try {
 			new Merchant("Merchat test", null, MerchantType.DIGITAL, "http://callback.url" );

@@ -28,8 +28,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import com.mitocode.qrpayment.domain.model.vo.PaymentConfirmation;
+import com.mitocode.qrpayment.infraestructure.out.proxy.exception.ProxyException;
 
-public class MerchantProxyImplTest {
+class MerchantProxyImplTest {
 	private static String extractBody(HttpRequest request) throws InterruptedException {
 		Optional<HttpRequest.BodyPublisher> opt = request.bodyPublisher();
 		assertTrue(opt.isPresent(), "El BodyPublisher debe estar presente");
@@ -109,7 +110,7 @@ public class MerchantProxyImplTest {
 	}
 
 	@Test
-	@DisplayName("confirmedPayment: IOException se envuelve en RuntimeException")
+	@DisplayName("confirmedPayment: ProxyException se envuelve en RuntimeException")
 	void confirmedPayment_ioException_wrapped() throws Exception {
 		HttpClient httpClient = mock(HttpClient.class);
 		MerchantProxyImpl proxy = new MerchantProxyImpl(httpClient);
@@ -119,12 +120,12 @@ public class MerchantProxyImplTest {
 
 		PaymentConfirmation confirmation = mock(PaymentConfirmation.class);
 
-		IOException ex = assertThrows(IOException.class, () -> proxy.confirmedPayment(confirmation));
-		assertTrue(ex  instanceof IOException);
+		ProxyException ex = assertThrows(ProxyException.class, () -> proxy.confirmedPayment(confirmation));
+		assertTrue(ex  instanceof ProxyException);
 	}
 
 	@Test
-	@DisplayName("confirmedPayment: InterruptedException se envuelve en RuntimeException")
+	@DisplayName("confirmedPayment: ProxyException se envuelve en RuntimeException")
 	void confirmedPayment_interruptedException_wrapped() throws Exception {
 		HttpClient httpClient = mock(HttpClient.class);
 		MerchantProxyImpl proxy = new MerchantProxyImpl(httpClient);
@@ -134,7 +135,7 @@ public class MerchantProxyImplTest {
 
 		PaymentConfirmation confirmation = mock(PaymentConfirmation.class);
 
-		InterruptedException ex = assertThrows(InterruptedException.class, () -> proxy.confirmedPayment(confirmation));
-		assertTrue(ex instanceof InterruptedException);
+		ProxyException ex = assertThrows(ProxyException.class, () -> proxy.confirmedPayment(confirmation));
+		assertTrue(ex instanceof ProxyException);
 	}
 }

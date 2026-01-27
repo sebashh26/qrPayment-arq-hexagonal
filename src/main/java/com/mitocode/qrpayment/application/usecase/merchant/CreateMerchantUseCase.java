@@ -9,16 +9,15 @@ import com.mitocode.qrpayment.application.mapper.MerchantToMerchantDto;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Component
 public class CreateMerchantUseCase {
 	
 	private final MerchantRepository merchantRepository;
 	private final MerchantToMerchantDto mapper;
 	
-	public CreateMerchantUseCase(MerchantRepository merchantRepository, MerchantToMerchantDto mapper) {
-		this.merchantRepository = merchantRepository;
-		this.mapper = mapper;
-	}
 	
 	public MerchantDto execute(CreateMerchantCommand merchantCmd) {
 
@@ -26,10 +25,9 @@ public class CreateMerchantUseCase {
             throw new InvalidRequestException("Email already exists");
         }
 
-        if ( merchantCmd.getType().isDigital() ) {
-            if (merchantCmd.getCallbackUrl() == null || merchantCmd.getCallbackUrl().isEmpty()) {
+        if ( merchantCmd.getType().isDigital() 
+                && (merchantCmd.getCallbackUrl() == null || merchantCmd.getCallbackUrl().isEmpty()) ) {
                 throw new InvalidRequestException("callbackUrl is required");
-            }
         }
 
         Merchant merchant  = new Merchant(

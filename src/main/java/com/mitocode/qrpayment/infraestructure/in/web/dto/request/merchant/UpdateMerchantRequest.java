@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UpdateMerchantRequest {
 
-	@NotBlank(message = "merchantId is required")
+	//@NotBlank(message = "merchantId is required")
 	private String merchantId;
 	
 	@NotBlank(message = "name is required")

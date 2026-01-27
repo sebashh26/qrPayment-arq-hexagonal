@@ -9,7 +9,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -29,8 +28,9 @@ import org.mockito.ArgumentCaptor;
 import com.mitocode.qrpayment.domain.model.enums.BrandStatus;
 import com.mitocode.qrpayment.domain.model.vo.BrandAuthorizationResult;
 import com.mitocode.qrpayment.domain.model.vo.BrandAuthorizedRq;
+import com.mitocode.qrpayment.infraestructure.out.proxy.exception.ProxyException;
 
-public class BrandProxyImplTest {
+class BrandProxyImplTest {
 	private static String extractBody(HttpRequest request) throws InterruptedException {
 		Optional<HttpRequest.BodyPublisher> opt = request.bodyPublisher();
 		assertTrue(opt.isPresent(), "El BodyPublisher debe estar presente");
@@ -139,11 +139,11 @@ public class BrandProxyImplTest {
 		BrandProxyImpl proxy = new BrandProxyImpl(httpClient);
 
 		when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
-				.thenThrow(new IOException("network-err"));
+				.thenThrow(new ProxyException("network-err"));
 
-		RuntimeException ex = assertThrows(RuntimeException.class,
+		ProxyException ex = assertThrows(ProxyException.class,
 				() -> proxy.authorizePayment(new BrandAuthorizedRq("4111111111111", "01", "2030", "999")));
-		assertTrue(ex.getCause() instanceof IOException);
+		assertTrue(ex instanceof ProxyException);
 	}
 
 	@Test
@@ -153,10 +153,10 @@ public class BrandProxyImplTest {
 		BrandProxyImpl proxy = new BrandProxyImpl(httpClient);
 
 		when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
-				.thenThrow(new InterruptedException("interrupted"));
+				.thenThrow(new ProxyException("interrupted"));
 
-		RuntimeException ex = assertThrows(RuntimeException.class,
+		ProxyException ex = assertThrows(ProxyException.class,
 				() -> proxy.authorizePayment(new BrandAuthorizedRq("4111111111111", "01", "2030", "999")));
-		assertTrue(ex.getCause() instanceof InterruptedException);
+		assertTrue(ex instanceof ProxyException);
 	}
 }

@@ -11,19 +11,19 @@ public class MerchantRequestMapper {
 
     public static CreateMerchantCommand toCommand(CreateMerchantRequest request) {
         return new CreateMerchantCommand(
-                request.getCallBackUrl(),
-                request.getEmail(),
-                request.getName(),
-                request.getType()
+        		request.getEmail(),
+        		request.getName(),
+                request.getType(),
+                request.getCallBackUrl()
         );
     }
 
     public static UpdateMerchantCommand toCommand(UpdateMerchantRequest request) {
         return new UpdateMerchantCommand(
                 request.getMerchantId(),
-                request.getCallBackUrl(),
                 request.getName(),
-                request.getType()
+                request.getType(),
+                request.getCallBackUrl()
         );
     }
 }

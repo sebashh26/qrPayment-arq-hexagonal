@@ -24,7 +24,7 @@ import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class DeleteMerchantUseCaseTest {
+class DeleteMerchantUseCaseTest {
 
     @Mock
     private MerchantRepository merchantRepository;

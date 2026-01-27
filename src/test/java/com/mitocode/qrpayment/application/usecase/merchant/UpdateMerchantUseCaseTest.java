@@ -25,7 +25,7 @@ import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class UpdateMerchantUseCaseTest {
+class UpdateMerchantUseCaseTest {
 
     @Mock
     private MerchantRepository merchantRepository;
@@ -36,7 +36,7 @@ public class UpdateMerchantUseCaseTest {
 
     @Test
     void shouldThrowWhenMerchantNotFound() {
-        UpdateMerchantCommand cmd = new UpdateMerchantCommand("id", "New", "new@example.com", MerchantType.DIGITAL);
+        UpdateMerchantCommand cmd = new UpdateMerchantCommand("id", "New", MerchantType.DIGITAL, "new@example.com");
         when(merchantRepository.findById("id")).thenReturn(Optional.empty());
         BusinessException ex = assertThrows(BusinessException.class, () -> useCase.execute(cmd));
         assertEquals("Merchant not found", ex.getMessage());
@@ -45,7 +45,7 @@ public class UpdateMerchantUseCaseTest {
     void shouldThrowWhenDigitalCallBackMissing() {
     	Merchant merchant = new Merchant("Name", "email@example.com", MerchantType.DIGITAL, "cb");
     	when(merchantRepository.findById("id")).thenReturn(Optional.of(merchant));
-    	UpdateMerchantCommand cmd = new UpdateMerchantCommand("id", null, "new@example.com", MerchantType.DIGITAL);
+    	UpdateMerchantCommand cmd = new UpdateMerchantCommand("id","new@example.com", MerchantType.DIGITAL,null);
     	BusinessException ex = assertThrows(BusinessException.class, () -> useCase.execute(cmd));
     	assertEquals("callbackUrl is required", ex.getMessage());
     }
@@ -63,7 +63,7 @@ public class UpdateMerchantUseCaseTest {
         expected.setMerchantId(merchant.getMerchantId());
         when(mapper.buildMerchantDto(any(Merchant.class))).thenReturn(expected);
 
-        UpdateMerchantCommand cmd = new UpdateMerchantCommand("id", null, "Updated", MerchantType.PHYSICAL);
+        UpdateMerchantCommand cmd = new UpdateMerchantCommand("id", null, MerchantType.PHYSICAL, "Updated");
         MerchantDto result = useCase.execute(cmd);
         verify(merchantRepository).update(any(Merchant.class));
         assertEquals("Updated", result.getName());
@@ -83,7 +83,7 @@ public class UpdateMerchantUseCaseTest {
         expected.setStatus(MerchantStatus.ACTIVE);
         when(mapper.buildMerchantDto(any(Merchant.class))).thenReturn(expected);
 
-        UpdateMerchantCommand cmd = new UpdateMerchantCommand("id", "Updated", "new@example.com", MerchantType.DIGITAL);
+        UpdateMerchantCommand cmd = new UpdateMerchantCommand("id", "Updated", MerchantType.DIGITAL, "new@example.com");
         MerchantDto result = useCase.execute(cmd);
         verify(merchantRepository).update(any(Merchant.class));
         assertEquals("Updated", result.getName());

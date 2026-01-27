@@ -1,0 +1,91 @@
+package com.mitocode.qrpayment.infraestructure.in.web.config.security;
+
+import java.util.Collection;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.DelegatingJwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+
+@Configuration
+@EnableWebSecurity	
+@EnableMethodSecurity
+public class SecurityConfig {
+	
+//	**@Bean** → indica que el método produce un objeto gestionado por Spring.  
+//	- **Converter<Jwt, Collection<GrantedAuthority>>** → función que recibe un JWT y devuelve las autoridades (roles).  
+//	- **DelegatingJwtGrantedAuthoritiesConverter** → convertidor que delega la extracción de roles a otros convertidores.  
+//	- **KeycloakJwtRolesConverter** → convertidor personalizado que sabe cómo leer los roles dentro del JWT de Keycloak.  
+
+	
+	@Bean
+    Converter<Jwt, Collection<GrantedAuthority>> rolesAuthoritiesConverter() {
+        return new DelegatingJwtGrantedAuthoritiesConverter(new KeycloakJwtRolesConverter());
+    }
+	
+	@Bean
+    JwtAuthenticationConverter authenticationConverter(Converter<Jwt, Collection<GrantedAuthority>> authoritiesConverter) {
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter
+                .setJwtGrantedAuthoritiesConverter(authoritiesConverter::convert);
+        		//.setJwtGrantedAuthoritiesConverter(jwt -> authoritiesConverter.convert(jwt));
+        return jwtAuthenticationConverter;
+    }
+	
+	
+	/*Este método configura la cadena de filtros de seguridad (SecurityFilterChain) de Spring Security para tu aplicación que actúa como Resource Server con JWT.*/
+
+	@Bean
+    SecurityFilterChain resourceServerSecurityFilterChain(HttpSecurity http,
+                                                          Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter) throws Exception {
+        http.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter)));
+
+        http
+                .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // <- importante para H2
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs",
+                                "/v3/api-docs.yaml",
+                                "/v3/api-docs/**",
+                                "/h2-console/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwtConfigurer -> jwtConfigurer
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter)
+                        )
+                );
+
+        return http.build();
+    }
+	
+	@Bean
+    public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+}

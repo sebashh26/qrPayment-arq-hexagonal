@@ -37,8 +37,7 @@ public class QRGeneratorImpl implements QRGenerator {
 			return pngOutputStream.toByteArray();
 
 		} catch (WriterException | IOException e) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException("Error generating QR code image", e);
+			throw new QRException( e.getMessage());
 		}
 	}
 

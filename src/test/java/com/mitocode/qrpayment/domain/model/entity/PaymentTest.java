@@ -1,103 +1,92 @@
 package com.mitocode.qrpayment.domain.model.entity;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mitocode.qrpayment.domain.model.enums.BrandType;
-import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
 import com.mitocode.qrpayment.domain.model.enums.PaymentStatus;
 
-public class PaymentTest {
-	
-	 @Test
-	    void shouldCreateValidPayment() {
-	        Payment payment = new Payment(
-	                "merchant-123",
-	                "qr-456",
-	                new BigDecimal("100.00"),
-	                CurrencyCode.PEN,
-	                "PO123",
-	                PaymentStatus.AUTHORIZED,
-	                BrandType.VISA,
-	                "wallet-xyz",
-	                null,
-	                LocalDateTime.now(),
-	                null
-	        );
+class PaymentTest {
 
-	        assertNotNull(payment.getPaymentId());
-	        assertEquals(PaymentStatus.AUTHORIZED, payment.getStatus());
-	        assertEquals(CurrencyCode.PEN, payment.getCurrency());
-	    }
+    private Payment payment;
 
-	    @Test
-	    void shouldThrowExceptionIfAmountIsNegative() {
-	        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-	                new Payment(
-	                        "merchant-123",
-	                        "qr-456",
-	                        new BigDecimal("-50.00"),
-	                        CurrencyCode.PEN,
-	                        "PO123",
-	                        PaymentStatus.AUTHORIZED,
-	                        BrandType.VISA,
-	                        "wallet-xyz",
-	                        null,
-	                        LocalDateTime.now(),
-	                        null
-	                )
-	        );
+    @BeforeEach
+    void setUp() {
+        payment = Payment.builder()
+                .merchantId("M123")
+                .qrId("QR123")
+                .walletId("W123")
+                .status(PaymentStatus.AUTHORIZED)
+                .authorizationInfo(new AuthorizationInfo())
+                .build();
+    }
 
-	        assertEquals("Amount must be greater than zero", exception.getMessage());
-	    }
+    @Test
+    void validateAmount_shouldThrowException_whenAmountIsZeroOrNegative() {
+        assertThrows(IllegalArgumentException.class, () -> payment.validateAmount(BigDecimal.ZERO));
+        assertThrows(IllegalArgumentException.class, () -> payment.validateAmount(BigDecimal.valueOf(-10)));
+    }
 
-	    @Test
-	    void shouldThrowExceptionIfRequiredFieldIsNull() {
-	        // Ejemplo con merchantId null
-	    	IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-	                new Payment(
-	                        null,
-	                        "qr-456",
-	                        new BigDecimal("100.00"),
-	                        CurrencyCode.PEN,
-	                        "PO123",
-	                        PaymentStatus.AUTHORIZED,
-	                        BrandType.VISA,
-	                        "wallet-xyz",
-	                        null,
-	                        LocalDateTime.now(),
-	                        null
-	                )
-	        );
+    @Test
+    void validateAmount_shouldPass_whenAmountIsPositive() {
+        assertDoesNotThrow(() -> payment.validateAmount(BigDecimal.valueOf(100)));
+    }
 
-	        assertEquals("Merchant ID is required", exception.getMessage());
-	    }
+    @Test
+    void validateRequiredFields_shouldThrowException_whenMerchantIdIsMissing() {
+        payment.setMerchantId(null);
+        assertThrows(IllegalArgumentException.class, () -> payment.validateRequiredFields());
+    }
 
-	    @Test
-	    void shouldUpdateStatusToRefundWhenRefundPaymentIsCalled() {
-	        Payment payment = new Payment(
-	                "merchant-123",
-	                "qr-456",
-	                new BigDecimal("100.00"),
-	                CurrencyCode.PEN,
-	                "PO123",
-	                PaymentStatus.AUTHORIZED,
-	                BrandType.VISA,
-	                "wallet-xyz",
-	                null,
-	                LocalDateTime.now(),
-	                null
-	        );
+    @Test
+    void validateRequiredFields_shouldThrowException_whenQrIdIsMissing() {
+        payment.setQrId("");
+        assertThrows(IllegalArgumentException.class, () -> payment.validateRequiredFields());
+    }
 
-	        payment.refundPayment();
+    @Test
+    void validateRequiredFields_shouldThrowException_whenStatusIsMissing() {
+        payment.setStatus(null);
+        assertThrows(IllegalArgumentException.class, () -> payment.validateRequiredFields());
+    }
 
-	        assertEquals(PaymentStatus.REFUNDED, payment.getStatus());
-	    }
+    @Test
+    void validateRequiredFields_shouldThrowException_whenWalletIdIsMissing() {
+        payment.setWalletId(null);
+        assertThrows(IllegalArgumentException.class, () -> payment.validateRequiredFields());
+    }
 
+    @Test
+    void refundPayment_shouldUpdateStatusToRefunded_whenAuthorized() {
+        payment.refundPayment();
+        assertEquals(PaymentStatus.REFUNDED, payment.getStatus());
+        assertNotNull(payment.getAuthorizationInfo().getRefundedAt());
+    }
+
+    @Test
+    void refundPayment_shouldThrowException_whenNotAuthorized() {
+        payment.setStatus(PaymentStatus.DENIED);
+        assertThrows(IllegalStateException.class, () -> payment.refundPayment());
+    }
+
+    @Test
+    void generatePaymentId_shouldGenerateUuid_whenPaymentIdIsNull() {
+        payment.setPaymentId(null);
+        payment.generatePaymentId();
+        assertNotNull(payment.getPaymentId());
+    }
+
+    @Test
+    void generatePaymentId_shouldNotChangePaymentId_whenAlreadySet() {
+        String existingId = "PAY123";
+        payment.setPaymentId(existingId);
+        payment.generatePaymentId();
+        assertEquals(existingId, payment.getPaymentId());
+    }
 }

@@ -16,7 +16,7 @@ import com.mitocode.qrpayment.domain.model.enums.QRStatus;
 import com.mitocode.qrpayment.domain.model.enums.QRType;
 import com.mitocode.qrpayment.domain.model.exception.QRInvalidException;
 
-public class QRCodeTest {
+class QRCodeTest {
 	
 	@Test
     void validateRequiredFields_withNullMerchantId_throwsException() {

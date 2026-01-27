@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import com.mitocode.qrpayment.domain.model.enums.WalletStatus;
 import com.mitocode.qrpayment.domain.model.exception.WalletException;
 
-public class WalletTest {
+class WalletTest {
 	
 	@Test
     void isActive_whenStatusIsActive_returnsTrue() {

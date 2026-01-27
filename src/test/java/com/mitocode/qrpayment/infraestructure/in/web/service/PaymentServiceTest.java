@@ -17,7 +17,7 @@ import com.mitocode.qrpayment.infraestructure.in.web.dto.request.payment.Payment
 import com.mitocode.qrpayment.infraestructure.in.web.dto.response.PaymentResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class PaymentServiceTest {
+class PaymentServiceTest {
 	
 	@Mock
     private AuthorizedQRUseCase useCase;

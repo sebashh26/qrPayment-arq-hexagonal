@@ -12,7 +12,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.mitocode.qrpayment.application.exception.BusinessException;
 import com.mitocode.qrpayment.application.exception.InvalidRequestException;
+import com.mitocode.qrpayment.domain.model.exception.QRInvalidException;
+import com.mitocode.qrpayment.infraestructure.out.proxy.exception.ProxyException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -52,9 +55,10 @@ public class GlobalExceptionMapper {
 //        return ResponseEntity.badRequest().body(response);
 //    } 
 
-    @ExceptionHandler(InvalidRequestException.class)
+	@ExceptionHandler({InvalidRequestException.class , BusinessException.class, QRInvalidException.class})
     public ResponseEntity<ErrorResponse> handleInvalidRequestException( RuntimeException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(
+        ErrorResponse errorResponse = new ErrorResponse
+                (
                         "01",
                         "Datos inválidos",
                         ex.getMessage()
@@ -87,5 +91,16 @@ public class GlobalExceptionMapper {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+    
+    @ExceptionHandler({ProxyException.class})
+    public ResponseEntity<ErrorResponse> handleErrorProxy( RuntimeException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse
+                (
+                        "03",
+                        "Ocurrio un error en el servidor",
+                        ex.getMessage()
+                );
 
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
 }

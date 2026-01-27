@@ -24,7 +24,7 @@ import org.mockito.Mockito;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-public class QRGeneratorImplTest {
+class QRGeneratorImplTest {
 	@Test
 	@DisplayName("generateImage: retorna PNG válido de 256x256")
 	void generateImage_success_png() throws Exception {
@@ -51,8 +51,8 @@ public class QRGeneratorImplTest {
 				})) {
 
 			QRGeneratorImpl generator = new QRGeneratorImpl();
-			RuntimeException ex = assertThrows(RuntimeException.class, () -> generator.generateImage("DATA"));
-			assertTrue(ex.getCause() instanceof WriterException);
+			QRException ex = assertThrows(QRException.class, () -> generator.generateImage("DATA"));
+			assertTrue(ex instanceof QRException);
 		}
 	}
 
@@ -74,8 +74,8 @@ public class QRGeneratorImplTest {
 					.thenThrow(new IOException("io-fail"));
 
 			QRGeneratorImpl generator = new QRGeneratorImpl();
-			RuntimeException ex = assertThrows(RuntimeException.class, () -> generator.generateImage("DATA"));
-			assertTrue(ex.getCause() instanceof IOException);
+			QRException ex = assertThrows(QRException.class, () -> generator.generateImage("DATA"));
+			assertTrue(ex instanceof QRException);
 		}
 	}
 }

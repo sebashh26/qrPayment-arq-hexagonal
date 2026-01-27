@@ -27,7 +27,7 @@ import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class CreateMerchantUseCaseTest {
+class CreateMerchantUseCaseTest {
 
 	// Usa @mock para dependencias externas que quieres simular.
 	// Usa @InjectMock para la clase que realmente quieres probar, con sus
@@ -45,7 +45,7 @@ public class CreateMerchantUseCaseTest {
 
 	@BeforeEach
 	void setUp() {
-		command = new CreateMerchantCommand("http://cb", "email@example.com", "Merchant Test", MerchantType.DIGITAL);
+		command = new CreateMerchantCommand( "email@example.com", "Merchant Test", MerchantType.DIGITAL,"http://cb");
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class CreateMerchantUseCaseTest {
 	
 	@Test
     void shouldThrowWhenDigitalMerchantWithoutCallback() {
-        command = new CreateMerchantCommand(null, "email@example.com", "Merchant Test", MerchantType.DIGITAL );
+        command = new CreateMerchantCommand( "email@example.com", "Merchant Test", MerchantType.DIGITAL,null );
         when(merchantRepository.existsByEmail(command.getEmail())).thenReturn(false);
         InvalidRequestException ex = assertThrows(InvalidRequestException.class, () -> useCase.execute(command));
         assertEquals("callbackUrl is required", ex.getMessage());

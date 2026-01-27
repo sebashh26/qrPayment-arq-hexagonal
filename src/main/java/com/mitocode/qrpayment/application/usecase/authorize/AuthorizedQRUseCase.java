@@ -1,6 +1,6 @@
 package com.mitocode.qrpayment.application.usecase.authorize;
 
-import java.io.IOException;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,10 @@ import com.mitocode.qrpayment.application.exception.BusinessException;
 import com.mitocode.qrpayment.application.mapper.PaymentConfirmationMapper;
 import com.mitocode.qrpayment.application.mapper.PaymentStatusMapper;
 import com.mitocode.qrpayment.application.mapper.PaymentToPaymentDto;
+import com.mitocode.qrpayment.domain.model.entity.AuthorizationInfo;
+import com.mitocode.qrpayment.domain.model.entity.Card;
 import com.mitocode.qrpayment.domain.model.entity.Merchant;
+import com.mitocode.qrpayment.domain.model.entity.Order;
 import com.mitocode.qrpayment.domain.model.entity.Payment;
 import com.mitocode.qrpayment.domain.model.entity.QRCode;
 import com.mitocode.qrpayment.domain.model.entity.Wallet;
@@ -27,6 +30,9 @@ import com.mitocode.qrpayment.domain.port.out.persistence.WalletRepository;
 import com.mitocode.qrpayment.domain.port.out.proxy.BrandProxy;
 import com.mitocode.qrpayment.domain.port.out.proxy.MerchantProxy;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Component
 public class AuthorizedQRUseCase {
 
@@ -37,30 +43,21 @@ public class AuthorizedQRUseCase {
 	private final BrandProxy brandProxy;
 	private final PaymentRepository paymentRepository;
 
-	public AuthorizedQRUseCase(MerchantProxy merchantProxy, MerchantRepository merchantRepository,
-			QRRepository qrRepository, WalletRepository walletRepository, BrandProxy brandProxy,
-			PaymentRepository paymentRepository) {
-		this.merchantProxy = merchantProxy;
-		this.merchantRepository = merchantRepository;
-		this.qrRepository = qrRepository;
-		this.walletRepository = walletRepository;
-		this.brandProxy = brandProxy;
-		this.paymentRepository = paymentRepository;
-	}
+	
 
 	public PaymentDto execute(PaymentCommand paymentCommand) {
 		//USO  de form ejemplo:	Order.fromEvent(event) es un método de fábrica que transforma el DTO del evento en una entidad de dominio.
 		QRData qrData = QRData.from(paymentCommand.getQrData());
 		
-		System.out.println(qrData.toString());
+		//System.out.println(qrData.toString());
 		
 		Merchant merchant = merchantRepository.findById(paymentCommand.getMerchantId())
-				.orElseThrow(() -> new RuntimeException("Merchant not found"));
+				.orElseThrow(() -> new BusinessException("Merchant not found"));
 		
 		merchant.validate();
 		
 		QRCode qrCode = qrRepository.findById(qrData.getId())
-				.orElseThrow(() -> new RuntimeException("QR Code not found"));
+				.orElseThrow(() -> new BusinessException("QR Code not found"));
 		
 		qrCode.isValidQR();
 		
@@ -91,32 +88,44 @@ public class AuthorizedQRUseCase {
         );	
 
         BrandAuthorizationResult brandAuthorizedRs = brandProxy.authorizePayment(brandRequest);
-
-        Payment payment = new Payment(paymentCommand.getMerchantId(),
-        		qrData.getId(), paymentCommand.getAmount(),
-                paymentCommand.getCurrency(), paymentCommand.getPurchaseOrderid(),
-                PaymentStatusMapper.fromBrandStatus(brandAuthorizedRs.getStatus()),
-                BrandType.fromCardNumber(paymentCommand.getCardNumber()),
-                paymentCommand.getWalletId(),
-                brandAuthorizedRs.getFailedMessage(),
-                brandAuthorizedRs.getAuthorizedAt(), null
-                );
-
+        
+        Card card =  Card.builder().brand(BrandType.fromCardNumber(paymentCommand.getCardNumber()))
+				.build();
+        card.validateRequiredFields();
+        
+        Order order =  Order.builder().orderNumber(generateOrderNumber()).currency(paymentCommand.getCurrency()).
+        						amount(paymentCommand.getAmount()).purchaseOrderid(paymentCommand.getPurchaseOrderid()).
+        						installments("1").build();
+        order.validateRequiredFields();
+        
+        AuthorizationInfo authInfo = AuthorizationInfo.builder()
+				.authorizedAt(brandAuthorizedRs.getAuthorizedAt())
+				.failureReason(brandAuthorizedRs.getFailedMessage())
+				.build();
+        
+        Payment payment = Payment.builder()
+        		.merchantId(paymentCommand.getMerchantId())
+        		.qrId(qrData.getId())
+        		.walletId(paymentCommand.getWalletId()).card(card).order(order)
+        		.authorizationInfo(authInfo)
+				.status(PaymentStatusMapper.fromBrandStatus(brandAuthorizedRs.getStatus()))
+				.build();
+        
+        payment.validateRequiredFields();
+        payment.validateAmount(paymentCommand.getAmount());
+        payment.generatePaymentId();
+        
         PaymentConfirmation confirmation = PaymentConfirmationMapper.toConfirmation(payment);
-
-        try {
-			merchantProxy.confirmedPayment(confirmation);
-        } catch (IOException e) {
-            throw new RuntimeException("I/O error notifying merchant: " + e.getMessage(), e);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // restaurar estado de interrupción
-            throw new RuntimeException("Thread interrupted while notifying merchant", e);
-        }
-
+        
+		merchantProxy.confirmedPayment(confirmation);
 
         Payment paymentRs = paymentRepository.save(payment);
         return PaymentToPaymentDto.buildPaymentDto(paymentRs);
 
 	}
+	
+	private String generateOrderNumber() {
+        return "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
 
 }

@@ -13,7 +13,7 @@ import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
 import com.mitocode.qrpayment.domain.model.enums.QRType;
 import com.mitocode.qrpayment.domain.model.vo.QRData;
 
-public class QRDataTest {
+class QRDataTest {
 	@Test
 	@DisplayName("from: parsea correctamente un rawData válido separado por ':'")
 	void from_parses_valid() {

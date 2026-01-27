@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
-import com.mitocode.qrpayment.domain.model.enums.MerchantStatus;
-import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 import com.mitocode.qrpayment.domain.model.enums.PaymentStatus;
 
 import lombok.AllArgsConstructor;

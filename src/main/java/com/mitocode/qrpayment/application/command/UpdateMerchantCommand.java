@@ -2,6 +2,11 @@ package com.mitocode.qrpayment.application.command;
 
 import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class UpdateMerchantCommand {
 
     private String merchantId;
@@ -9,27 +14,4 @@ public class UpdateMerchantCommand {
     private MerchantType type;
     private String callbackUrl;
 
-    public UpdateMerchantCommand(String merchantId, String callbackUrl, String name, MerchantType type) {
-        this.callbackUrl = callbackUrl;
-        this.name = name;
-        this.type = type;
-        this.merchantId = merchantId;
-    }
-
-
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
-    public String getMerchantId() {
-        return merchantId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public MerchantType getType() {
-        return type;
-    }
 }

@@ -15,7 +15,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
-public class CreateMerchantRequestTest {
+class CreateMerchantRequestTest {
 
 	private final Validator validator;
 

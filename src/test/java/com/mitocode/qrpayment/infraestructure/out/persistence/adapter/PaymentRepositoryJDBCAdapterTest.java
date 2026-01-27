@@ -18,7 +18,7 @@ import com.mitocode.qrpayment.infraestructure.out.persistence.entity.PaymentEnti
 import com.mitocode.qrpayment.infraestructure.out.persistence.mapper.PaymentEntityMapper;
 import com.mitocode.qrpayment.infraestructure.out.persistence.repository.jdbc.PaymentRepositoryJDBC;
 
-public class PaymentRepositoryJDBCAdapterTest {
+class PaymentRepositoryJDBCAdapterTest {
 	
 	@Test
     @DisplayName("save: mapea Domain -> Entity, delega JDBC y mapea Entity -> Domain")

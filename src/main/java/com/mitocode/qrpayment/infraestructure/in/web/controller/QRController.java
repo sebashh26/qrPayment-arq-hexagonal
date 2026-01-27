@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mitocode.qrpayment.infraestructure.in.web.annotation.AuthorizeMerchantFilter;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.request.qr.CreateQRRequest;
 import com.mitocode.qrpayment.infraestructure.in.web.dto.response.QRResponse;
 import com.mitocode.qrpayment.infraestructure.in.web.service.QRService;
@@ -29,6 +30,7 @@ public class QRController {
     }
 
     @PostMapping
+    //@AuthorizeMerchantFilter()
     @Operation(summary = "Create a new QR Code", description = "Creates a new QR Code for payment processing")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "QR Code created successfully"),

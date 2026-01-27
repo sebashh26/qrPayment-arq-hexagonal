@@ -22,7 +22,7 @@ import com.mitocode.qrpayment.domain.model.enums.MerchantType;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class GetMerchantByIdUseCaseTest {
+class GetMerchantByIdUseCaseTest {
 
     @Mock
     private MerchantRepository merchantRepository;

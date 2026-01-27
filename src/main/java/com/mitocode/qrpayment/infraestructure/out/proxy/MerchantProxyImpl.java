@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.mitocode.qrpayment.domain.model.vo.PaymentConfirmation;
 import com.mitocode.qrpayment.domain.port.out.proxy.MerchantProxy;
+import com.mitocode.qrpayment.infraestructure.out.proxy.exception.ProxyException;
 
 @Component
 public class MerchantProxyImpl implements MerchantProxy {
@@ -24,9 +25,9 @@ public class MerchantProxyImpl implements MerchantProxy {
 	}
 
 	@Override
-	public void confirmedPayment(PaymentConfirmation paymentConfirmation) throws IOException, InterruptedException {
+	public void confirmedPayment(PaymentConfirmation paymentConfirmation) {
 		
-		String json = """ 
+		String json = """
 		{
 			"currency": "%s",
 			"paymentId": "%s",
@@ -54,8 +55,7 @@ public class MerchantProxyImpl implements MerchantProxy {
 		try {
 			this.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			throw e;
+			throw new ProxyException(e.getMessage());
 		}
 			
 			

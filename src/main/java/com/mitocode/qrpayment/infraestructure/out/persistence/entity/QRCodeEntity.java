@@ -4,27 +4,41 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.mitocode.qrpayment.domain.model.enums.CurrencyCode;
 import com.mitocode.qrpayment.domain.model.enums.QRStatus;
 import com.mitocode.qrpayment.domain.model.enums.QRType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "qrcodes")
-public class QRCodeEntity {
+public class QRCodeEntity extends BaseAuditingEntity{
 
 	@Id
-	@Column(name = "qrid")
+	@Column(name = "id")
 	private String id;
 	@Column(name = "merchantid", length = 36)
 	private String merchantId;
-	@Column(name = "purchaseordernumber", nullable = false, length = 50)
+	@Column(name = "purchaseorder", nullable = false, length = 50)
 	private String purchaseOrder;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false, length = 20)
@@ -39,108 +53,13 @@ public class QRCodeEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false, length = 20)
 	private QRStatus status;
+	@Lob
 	@Column(name = "qrimage")
 	private byte[] qrImage;
 	@Column(name = "qrdata")
 	private String qrData;
 
-	public QRCodeEntity() {
-	}
-
-	public QRCodeEntity(String id, String merchantId, String purchaseOrder, QRType type, CurrencyCode currencyCode,
-			BigDecimal amount, LocalDateTime expirateDate, QRStatus status, byte[] qrImage, String qrData) {
-		this.id = id;
-		this.merchantId = merchantId;
-		this.purchaseOrder = purchaseOrder;
-		this.type = type;
-		this.currencyCode = currencyCode;
-		this.amount = amount;
-		this.expirateDate = expirateDate;
-		this.status = status;
-		this.qrImage = qrImage;
-		this.qrData = qrData;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getMerchantId() {
-		return merchantId;
-	}
-
-	public void setMerchantId(String merchantId) {
-		this.merchantId = merchantId;
-	}
-
-	public String getPurchaseOrder() {
-		return purchaseOrder;
-	}
-
-	public void setPurchaseOrder(String purchaseOrder) {
-		this.purchaseOrder = purchaseOrder;
-	}
-
-	public QRType getType() {
-		return type;
-	}
-
-	public void setType(QRType type) {
-		this.type = type;
-	}
-
-	public CurrencyCode getCurrencyCode() {
-		return currencyCode;
-	}
-
-	public void setCurrencyCode(CurrencyCode currencyCode) {
-		this.currencyCode = currencyCode;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-
-	public LocalDateTime getExpirateDate() {
-		return expirateDate;
-	}
-
-	public void setExpirateDate(LocalDateTime expirateDate) {
-		this.expirateDate = expirateDate;
-	}
-
-	public QRStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(QRStatus status) {
-		this.status = status;
-	}
-
-	public byte[] getQrImage() {
-		return qrImage;
-	}
-
-	public void setQrImage(byte[] qrImage) {
-		this.qrImage = qrImage;
-	}
-
-	public String getQrData() {
-		return qrData;
-	}
-
-	public void setQrData(String qrData) {
-		this.qrData = qrData;
-	}
-
+	
 	@Override
 	public String toString() {
 		return "QRCodeEntity{" + "id='" + id + '\'' + ", merchantId='" + merchantId + '\'' + ", purchaseOrder='"

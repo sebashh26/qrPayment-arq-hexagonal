@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.mitocode.qrpayment.domain.model.vo.BrandAuthorizedRq;
 
-public class BrandAuthorizationRequestTest {
+class BrandAuthorizationRequestTest {
 	@Test
     @DisplayName("Constructor: número de tarjeta válido crea instancia y getters devuelven valores")
     void constructor_valid() {
