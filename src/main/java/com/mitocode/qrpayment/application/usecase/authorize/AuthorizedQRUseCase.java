@@ -1,5 +1,6 @@
 package com.mitocode.qrpayment.application.usecase.authorize;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import com.mitocode.qrpayment.domain.model.entity.Merchant;
 import com.mitocode.qrpayment.domain.model.entity.Order;
 import com.mitocode.qrpayment.domain.model.entity.Payment;
 import com.mitocode.qrpayment.domain.model.entity.QRCode;
+import com.mitocode.qrpayment.domain.model.entity.RequestReverse;
 import com.mitocode.qrpayment.domain.model.entity.Wallet;
 import com.mitocode.qrpayment.domain.model.enums.BrandType;
 import com.mitocode.qrpayment.domain.model.enums.QRType;
@@ -26,6 +28,7 @@ import com.mitocode.qrpayment.domain.model.vo.QRData;
 import com.mitocode.qrpayment.domain.port.out.persistence.MerchantRepository;
 import com.mitocode.qrpayment.domain.port.out.persistence.PaymentRepository;
 import com.mitocode.qrpayment.domain.port.out.persistence.QRRepository;
+import com.mitocode.qrpayment.domain.port.out.persistence.RequestReverseRepository;
 import com.mitocode.qrpayment.domain.port.out.persistence.WalletRepository;
 import com.mitocode.qrpayment.domain.port.out.proxy.BrandProxy;
 import com.mitocode.qrpayment.domain.port.out.proxy.MerchantProxy;
@@ -42,8 +45,10 @@ public class AuthorizedQRUseCase {
 	private final WalletRepository walletRepository;
 	private final BrandProxy brandProxy;
 	private final PaymentRepository paymentRepository;
-
 	
+	private final RequestReverseRepository requestReverseRepository;
+
+	//USE CASE: Orquestan reglas de negocio: coordinan entidades y lógica del dominio para cumplir un objetivo (ej. crear orden, procesar pago).
 
 	public PaymentDto execute(PaymentCommand paymentCommand) {
 		//USO  de form ejemplo:	Order.fromEvent(event) es un método de fábrica que transforma el DTO del evento en una entidad de dominio.
@@ -60,6 +65,11 @@ public class AuthorizedQRUseCase {
 				.orElseThrow(() -> new BusinessException("QR Code not found"));
 		
 		qrCode.isValidQR();
+		
+		Optional<RequestReverse> requestReverse =  requestReverseRepository.findByMerchantIdAndQrId(merchant.getMerchantId(), qrCode.getId());
+		requestReverse.ifPresent(r -> {
+			throw new BusinessException("The transaction have a request reverse pending");
+		});
 		
 		if (qrCode.getQrtype() == QRType.DYNAMIC){
             if (qrCode.getAmount().compareTo(paymentCommand.getAmount()) != 0) {

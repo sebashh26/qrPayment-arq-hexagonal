@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import com.mitocode.qrpayment.infraestructure.in.web.context.AuthorizeContext;
 import com.mitocode.qrpayment.infraestructure.out.proxy.exception.ProxyException;
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class AuthorizeAspect {
 	
 	private static final String ROLE_WALLET = "role_wallets";

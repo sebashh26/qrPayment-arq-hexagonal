@@ -3,6 +3,7 @@ package com.mitocode.qrpayment.domain.model.enums;
 public enum PaymentStatus {
 	
 	AUTHORIZED("Authorized"),
+	PENDING("Pendiente"),
 	DENIED("Denied"),
 	REFUNDED("Refunded");
 	

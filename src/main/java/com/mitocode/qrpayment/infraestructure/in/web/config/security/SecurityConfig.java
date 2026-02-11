@@ -48,34 +48,45 @@ public class SecurityConfig {
 	
 	/*Este método configura la cadena de filtros de seguridad (SecurityFilterChain) de Spring Security para tu aplicación que actúa como Resource Server con JWT.*/
 
+//	@Bean
+//    SecurityFilterChain resourceServerSecurityFilterChain(HttpSecurity http,
+//                                                          Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter) throws Exception {
+//        http.oauth2ResourceServer(oauth2 -> oauth2
+//                .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter)));
+//
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // <- importante para H2
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(
+//                                "/swagger-ui/**",
+//                                "/swagger-ui.html",
+//                                "/v3/api-docs",
+//                                "/v3/api-docs.yaml",
+//                                "/v3/api-docs/**",
+//                                "/h2-console/**"
+//                        ).permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .oauth2ResourceServer(oauth2 -> oauth2
+//                        .jwt(jwtConfigurer -> jwtConfigurer
+//                                .jwtAuthenticationConverter(jwtAuthenticationConverter)
+//                        )
+//                );
+//
+//        return http.build();
+//    }
+	
 	@Bean
-    SecurityFilterChain resourceServerSecurityFilterChain(HttpSecurity http,
-                                                          Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter) throws Exception {
-        http.oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter)));
-
+    SecurityFilterChain noSecurity(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // <- importante para H2
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs",
-                                "/v3/api-docs.yaml",
-                                "/v3/api-docs/**",
-                                "/h2-console/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwtConfigurer -> jwtConfigurer
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter)
-                        )
-                );
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()));// todo abierto
 
         return http.build();
     }
+
 	
 	@Bean
     public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
