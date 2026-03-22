@@ -10,7 +10,7 @@ import com.mitocode.qrpayment.domain.model.entity.RequestReverse;
 import com.mitocode.qrpayment.domain.port.out.persistence.RequestReverseRepository;
 import com.mitocode.qrpayment.infraestructure.out.persistence.entity.RequestReverseEntity;
 import com.mitocode.qrpayment.infraestructure.out.persistence.mapper.RequestReverseEntityMapper;
-import com.mitocode.qrpayment.infraestructure.out.persistence.repository.dynamo.impl.RequestReverseDynamoImpl;
+import com.mitocode.qrpayment.infraestructure.out.persistence.repository.dynamo.RequestReverseDynamo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class RqReversRepoDynamoAdapter implements RequestReverseRepository{
 	
-	private final RequestReverseDynamoImpl requestReverseDynamo;
+	private final RequestReverseDynamo requestReverseDynamo;
 	private static final Logger logger = LoggerFactory.getLogger(RqReversRepoDynamoAdapter.class);
 
 	@Override

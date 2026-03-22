@@ -18,8 +18,11 @@ import com.mitocode.qrpayment.infraestructure.in.web.dto.response.MerchantRespon
 import com.mitocode.qrpayment.infraestructure.in.web.mapper.MerchantDtoMapper;
 import com.mitocode.qrpayment.infraestructure.in.web.mapper.MerchantRequestMapper;
 
+import lombok.RequiredArgsConstructor;
+
 
 //este es un Bol que agrupra varios casos de uso y se inyecta en el controlador para su uso
+@RequiredArgsConstructor
 @Service
 public class MerchantService {
 
@@ -29,18 +32,7 @@ public class MerchantService {
     private final UpdateMerchantUseCase updateMerchantUseCase;
     private final DeleteMerchantUseCase deleteMerchantUseCase;
 
-    public MerchantService(CreateMerchantUseCase createMerchantUseCase,
-                           GetAllMerchantUseCase getAllMerchantUseCase,
-                           GetMerchantByIdUseCase getMerchantByIdUseCase,
-                           UpdateMerchantUseCase updateMerchantUseCase,
-                           DeleteMerchantUseCase deleteMerchantUseCase) {
-        this.createMerchantUseCase = createMerchantUseCase;
-        this.getAllMerchantUseCase = getAllMerchantUseCase;
-        this.getMerchantByIdUseCase = getMerchantByIdUseCase;	
-        this.updateMerchantUseCase = updateMerchantUseCase;
-        this.deleteMerchantUseCase = deleteMerchantUseCase;
-    }
-
+   
     public MerchantResponse createMerchant(CreateMerchantRequest request){
         CreateMerchantCommand command = MerchantRequestMapper.toCommand(request);
         MerchantDto dto = createMerchantUseCase.execute(command);
