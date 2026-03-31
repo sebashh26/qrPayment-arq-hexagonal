@@ -25,7 +25,7 @@ src/main/java/com/miempresa/miapp/
 │
 ├── application      # Casos de uso y orquestación de lógica de negocio
 ├── domain           # Entidades, VO, interfaces de repositorio y lógica de negocio pura
-├── infrastructure   # Adaptadores a tecnologías externas (DB, APIs, mensajería)
+├── infraestructure   # Adaptadores a tecnologías externas (DB, APIs, mensajería)
 ```
 
 ---

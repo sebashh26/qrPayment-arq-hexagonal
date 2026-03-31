@@ -1,5 +1,42 @@
-{"properties": [{
-  "name": "app.name",
-  "type": "java.lang.String",
-  "description": "A description for 'app.name'"
-}]}
+{"properties": [
+  {
+    "name": "app.name",
+    "type": "java.lang.String",
+    "description": "A description for 'app.name'"
+  },
+  {
+    "name": "kafka.bootstrap-servers",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.bootstrap-servers'"
+  },
+  {
+    "name": "kafka.topics.request-merchant",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.topics.request-merchant'"
+  },
+  {
+    "name": "kafka.topics.response-merchant",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.topics.response-merchant'"
+  },
+  {
+    "name": "kafka.consumer.group-id",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.consumer.group-id'"
+  },
+  {
+    "name": "kafka.consumer.auto-offset-reset",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.consumer.auto-offset-reset'"
+  },
+  {
+    "name": "kafka.consumer.enable-auto-commit",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.consumer.enable-auto-commit'"
+  },
+  {
+    "name": "kafka.consumer.max-poll-records",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.consumer.max-poll-records'"
+  }
+]}
